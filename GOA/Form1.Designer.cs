@@ -80,7 +80,7 @@
         #endregion
         private System.Windows.Forms.TextBox textBox1;
         private Block block1;
-        private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Panel panel1;
     }
 }
 

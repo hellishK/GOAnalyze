@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Printing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace GOA
 {
@@ -24,7 +28,7 @@ namespace GOA
         public int margin = 25;
         public int newloc = 0;
         Block myParent;
-        
+
 
 
         private void AddChild_Click(object sender, EventArgs e)
@@ -49,7 +53,7 @@ namespace GOA
                     if (newBlock.Name == ch.Name) break;
                 }
             }
-            newBlock.Name = "block" + newBlock.lvl + "-" + index + "(" + (papa.childs.Count+1) + ")";
+            newBlock.Name = "block" + newBlock.lvl + "-" + index + "(" + (papa.childs.Count + 1) + ")";
             index = 0;
             // первый блок распологается непосредственно под родительским
             if (papa.childs.Count == 0)
@@ -64,7 +68,7 @@ namespace GOA
                     pra = pra.myParent;
                     //MessageBox.Show("Добавили в ветку " + pra.Name);
                 }
-                while (pra.myParent != null);
+                while (pra != null);
             }
 
             //все последующие - добавляются справа за последним элементом данного уровня
@@ -80,7 +84,7 @@ namespace GOA
                     pra = pra.myParent;
                     //MessageBox.Show("Добавили в ветку " + pra.Name);
                 }
-                while (pra.myParent != null);
+                while (pra != null);
 
                 //если добавление ОТ 1 уровня (на второй )
                 if (papa.lvl == 1)
@@ -101,7 +105,7 @@ namespace GOA
                     pra = papa;
                     while (pra.myParent != null)
                     {
-                       pra.Location = new Point(pra.childs[0].Location.X + (pra.childs[pra.childs.Count - 1].Location.X - pra.childs[0].Location.X) / 2, pra.Location.Y);
+                        pra.Location = new Point(pra.childs[0].Location.X + (pra.childs[pra.childs.Count - 1].Location.X - pra.childs[0].Location.X) / 2, pra.Location.Y);
                         foreach (Block ch in pra.myParent.childs)
                         {
                             index++;
@@ -141,13 +145,59 @@ namespace GOA
             //и самого нижнего правого ребенка
             while (right.childs.Count > 0)
             {
-                right = right.childs[right.childs.Count-1];
+                right = right.childs[right.childs.Count - 1];
             }
 
             //вычисляем координаты для блока1 (середину)
-            first.Location = new Point (left.Location.X + (right.Location.X - left.Location.X)/2, first.Location.Y);
+            first.Location = new Point(left.Location.X + (right.Location.X - left.Location.X) / 2, first.Location.Y);
             newBlock.BlockData.Text = newBlock.Name;
-            Form.ActiveForm.Controls.Find("panel1",false).FirstOrDefault().Controls.Add(newBlock);  
+            Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().Controls.Add(newBlock);
+
+
+            //отрисовка соединительных линий
+            Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().Refresh();
+
+            Pen pen = new Pen(Color.Black, 3);
+            Graphics formGraphics = Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().CreateGraphics();
+
+            //pen.StartCap = LineCap.ArrowAnchor;
+            //pen.EndCap = LineCap.RoundAnchor;
+            formGraphics.SmoothingMode = SmoothingMode.HighQuality;
+
+            int x1, y1, x2, y2, x3, y3, x4, y4;
+
+            foreach (Block b in first.branch)
+            {
+                //MessageBox.Show(b.Name);
+                if (b.myParent != null)
+                {
+                    //MessageBox.Show(b.Name + "     par-" + b.myParent.Name);
+                    x1 = b.myParent.Location.X + b.Width / 2;
+                    y1 = b.myParent.Location.Y + b.Height;
+                    x4 = b.Location.X + b.Width / 2;
+                    y4 = b.Location.Y;
+
+                    if (b.Location.X == b.myParent.Location.X)
+                    {
+                        formGraphics.DrawLine(pen, x1, y1, x4, y4);
+                        //MessageBox.Show("Нарисовал одну в if");
+                    }
+                    else
+                    {
+                        x2 = x1;
+                        y2 = b.myParent.Location.Y + b.Height + 10;
+                        x3 = b.Location.X + b.Width / 2;
+                        y3 = y2;
+                        formGraphics.DrawLine(pen, x1, y1, x2, y2);
+                        formGraphics.DrawLine(pen, x2, y2, x3, y3);
+                        formGraphics.DrawLine(pen, x3, y3, x4, y4);
+                        //MessageBox.Show("Нарисовал одну в else");
+                    }
+                }
+
+            }
+            pen.Dispose();
+            formGraphics.Dispose();
         }
     }
 }
