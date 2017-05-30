@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.block1 = new GOA.Block();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.block1 = new GOA.Block();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,24 +42,23 @@
             this.textBox1.Size = new System.Drawing.Size(631, 36);
             this.textBox1.TabIndex = 1;
             // 
-            // block1
-            // 
-            this.block1.BackColor = System.Drawing.Color.White;
-            this.block1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.block1.Location = new System.Drawing.Point(475, 32);
-            this.block1.Name = "block1";
-            this.block1.Size = new System.Drawing.Size(162, 70);
-            this.block1.TabIndex = 2;
-            // 
             // panel1
             // 
             this.panel1.AutoSize = true;
-            this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Controls.Add(this.block1);
-            this.panel1.Location = new System.Drawing.Point(8, 58);
+            this.panel1.Location = new System.Drawing.Point(12, 73);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(640, 105);
+            this.panel1.Size = new System.Drawing.Size(1129, 154);
             this.panel1.TabIndex = 3;
+            // 
+            // block1
+            // 
+            this.block1.BackColor = System.Drawing.Color.Transparent;
+            this.block1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.block1.Location = new System.Drawing.Point(424, 8);
+            this.block1.Name = "block1";
+            this.block1.Size = new System.Drawing.Size(188, 72);
+            this.block1.TabIndex = 4;
             // 
             // Form1
             // 
@@ -79,8 +78,8 @@
 
         #endregion
         private System.Windows.Forms.TextBox textBox1;
-        private Block block1;
         public System.Windows.Forms.Panel panel1;
+        private Block block1;
     }
 }
 
