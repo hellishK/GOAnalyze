@@ -15,12 +15,20 @@ namespace GOA
         {
             InitializeComponent();
         }
-        public ContextMenu node_menu = new ContextMenu();
-        public ContextMenu node_menu_add = new ContextMenu();
-        public ContextMenu node_menu_del = new ContextMenu();
+        ContextMenu node_menu = new ContextMenu();
+        ContextMenu node_menu_add = new ContextMenu();
+        ContextMenu node_menu_del = new ContextMenu();
 
         public void Tree_Load(object sender, EventArgs e)
-        {    
+        {
+            CreateNodeMenu(node_menu, node_menu_add, node_menu_del);  
+                treeView.Nodes[0].ContextMenu = node_menu_add;
+            treeView.NodeMouseClick += treeView_NodeMouseClick;
+
+        }
+
+        public void CreateNodeMenu(ContextMenu node_menu, ContextMenu node_menu_add, ContextMenu node_menu_del)
+        {
             MenuItem add_node1 = new MenuItem { Name = "Добавить ниже", Text = "Добавить ниже" };
             MenuItem del_node1 = new MenuItem { Name = "Удалить", Text = "Удалить" };
             add_node1.Click += AddNode_Click;
@@ -35,15 +43,12 @@ namespace GOA
             node_menu_add.MenuItems.Add(add_node2);
             node_menu_del.MenuItems.Add(del_node2);
 
-
-            treeView.Nodes[0].ContextMenu = node_menu_add;
-            treeView.NodeMouseClick += treeView_NodeMouseClick;
         }
 
         public void AddNode_Click(object sender, EventArgs e)
         {
             TreeNode new_node = new TreeNode();
-           // MessageBox.Show("Количество узлов - " + treeView.Nodes[0].Nodes.Count.ToString());
+           MessageBox.Show(treeView.SelectedNode.Text);
             if (treeView.SelectedNode.Level == 0)
             {
                 new_node.Text = "Новый процесс";
@@ -68,12 +73,12 @@ namespace GOA
             treeView.SelectedNode.Expand();
         }
 
-        private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        public void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 treeView.SelectedNode = e.Node;
-                MessageBox.Show("Количество узлов - " + treeView.Nodes[0].Nodes.Count.ToString() + " Выделенный узел - " + e.Node.Text);
+                //MessageBox.Show("Количество узлов - " + treeView.Nodes[0].Nodes.Count.ToString() + " Выделенный узел - " + e.Node.Text);
             }
         }
 

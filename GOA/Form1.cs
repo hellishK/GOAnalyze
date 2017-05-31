@@ -18,8 +18,8 @@ namespace GOA
         }
 
         Block copyBlock;
+        Block curentBlock;
         ContextMenu menu = new ContextMenu();
-        string copyText="";
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -60,19 +60,41 @@ namespace GOA
 
         private void CopyMenuItem_Click(object sender, EventArgs e)
         {
-            copyBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent;
-            copyText = ((TextBox)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl).Text;
+            if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.GetType() == typeof(Block))
+            {
+                //MessageBox.Show(((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.ToString());
+                copyBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent;
+                MessageBox.Show(((Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent).TypeOfBlock);
+            }
+
+            else if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.GetType() == typeof(Panel))
+            {
+                //MessageBox.Show(((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.ToString());
+                copyBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl;
+            }    
+            //copyText = copyBlock.BlockData.Text;
         }
 
         private void menuPasteText_Click(object sender, EventArgs e)
         {
-            ((TextBox)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl).Text = copyText;
+            if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.GetType() == typeof(TextBox))
+                ((TextBox)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl).Text = copyBlock.BlockData.Text;
+
+            else if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.GetType() == typeof(Panel))
+                ((TextBox)((Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent).BlockData).Text = copyBlock.BlockData.Text;
         }
 
         private void menuPasteBlockDown_Click(object sender, EventArgs e)
         {
-            Block curentBlock = ((Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent);
-            curentBlock.Add(curentBlock, copyBlock.BlockData.Text, 1, curentBlock.typeOfBlock);
+            if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.GetType() == typeof(Block))
+                curentBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent;
+
+            else if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.GetType() == typeof(Panel))
+                curentBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl;
+
+            //MessageBox.Show("Скопированный плок" + copyBlock.BlockData.TextToString());
+            curentBlock.Add(curentBlock, 1, copyBlock, copyBlock.TypeOfBlock);
+            
         }
     }
 }

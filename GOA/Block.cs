@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Reflection;
 
 namespace GOA
 {
@@ -22,10 +22,25 @@ namespace GOA
         public int margin = 20;
         public int newloc = 0;
         public Block myParent;
-        public string typeOfBlock="";
+        private string typeOfBlock;
         ContextMenu add_menu = new ContextMenu();
-        public Tree myTreeView = new Tree();
-        
+        ContextMenu node_menu = new ContextMenu();
+        ContextMenu node_menu_add = new ContextMenu();
+        ContextMenu node_menu_del = new ContextMenu();
+        Tree myTreeView = new Tree();
+
+        public string TypeOfBlock
+        {
+            get
+            {
+                return typeOfBlock;
+            }
+
+            set
+            {
+                typeOfBlock = value;
+            }
+        }
 
         public Block()
         {
@@ -51,13 +66,68 @@ namespace GOA
 
         }
 
+        private void copyNodes(Tree source, Tree target)
+        {
+            TreeNode newTn = new TreeNode();
+
+            MenuItem add_node1 = new MenuItem { Name = "Добавить ниже", Text = "Добавить ниже" };
+            MenuItem del_node1 = new MenuItem { Name = "Удалить", Text = "Удалить" };
+            add_node1.Click += target.AddNode_Click;
+            del_node1.Click += (s, ee) => { source.treeView.SelectedNode.Remove(); };
+
+            MenuItem add_node2 = new MenuItem { Name = "Добавить ниже", Text = "Добавить ниже" };
+            MenuItem del_node2 = new MenuItem { Name = "Удалить", Text = "Удалить" };
+            add_node2.Click += target.AddNode_Click;
+            del_node2.Click += (s, ee) => { source.treeView.SelectedNode.Remove(); };
+
+            node_menu.MenuItems.AddRange(new[] { add_node1, del_node1 });
+            node_menu_add.MenuItems.Add(add_node2);
+            node_menu_del.MenuItems.Add(del_node2);
+
+            target.treeView.Nodes.Clear();
+
+            foreach (TreeNode tn in source.treeView.Nodes)
+            {
+                copyChildNodes(tn, newTn);
+                target.treeView.Nodes.Add(newTn);
+            }
+            target.treeView.NodeMouseClick += myTreeView.treeView_NodeMouseClick;
+        }
+
+        private void copyChildNodes(TreeNode tn, TreeNode newTn)
+        {
+
+            newTn.Text = tn.Text;
+
+            if (tn.Level == 0)
+                newTn.ContextMenu = node_menu_add;
+
+            else if (tn.Level == 1)
+                newTn.ContextMenu = node_menu;
+
+            else if (tn.Level == 2)
+                newTn.ContextMenu = node_menu;
+
+            else if (tn.Level == 3)
+                newTn.ContextMenu = node_menu_del;
+
+            foreach (TreeNode tn_child in tn.Nodes)
+            {
+                newTn.Text = tn.Text;
+                TreeNode newTn_child = new TreeNode();
+                newTn_child.Text = tn_child.Text;
+                copyChildNodes(tn_child, newTn_child); 
+                newTn.Nodes.Add(newTn_child);
+            }
+        }
+
         public void AddPosition_Click(object sender, EventArgs e)
         {
-            Add(sender, "", 0, "position");
+            Add(sender, 0, null, "position");
         }
         public void AddDepartment_Click(object sender, EventArgs e)
         {
-            Add(sender, "", 0, "department");
+            Add(sender, 0, null, "department");
         }
 
         public void AddChild_Click(object sender, EventArgs e)
@@ -65,23 +135,24 @@ namespace GOA
             add_menu.Show((Button)sender, new Point(0, ((Button)sender).Height));
         }
 
-        public void AddType(object obj, string type)
+        public void AddType(object obj)
         {
             //MessageBox.Show(((Block)((((obj as MenuItem).GetContextMenu() as ContextMenu).SourceControl).Parent)).ToString());
-            if (type == "position")
-            {
-                ((Block)obj).typePicture.BackgroundImage = global::GOA.Properties.Resources.position_ico;
+            if ((obj as Block).TypeOfBlock == "position")
+            { 
+                ((Block)obj).typePicture.BackgroundImage = new Bitmap(Properties.Resources.position_ico);
                 ((Block)obj).Extend.Visible = false;
             }
-            else if (type == "department")
+            else if ((obj as Block).TypeOfBlock == "department")
             {
-                ((Block)obj).typePicture.BackgroundImage = global::GOA.Properties.Resources.department_ico;
+                ((Block)obj).typePicture.BackgroundImage = new Bitmap(Properties.Resources.department_ico);
                 ((Block)obj).Extend.Visible = true;
                 ((Block)obj).Extend.Click += Extend_Click;
             }
+            //MessageBox.Show((obj as Block).TypeOfBlock);
         }
 
-        public void Add(object obj, string s, int k, string type)
+        public void Add(object par, int k, Block copy, string type)
         {
             Block newBlock = new Block();
             Block first = Form.ActiveForm.Controls.Find("block1", true).FirstOrDefault() as Block;
@@ -91,18 +162,23 @@ namespace GOA
             Block left = first;
             Block right = first;
 
-            myTreeView.Hide();
-
-            typeOfBlock = type;
+            newBlock.myTreeView.Hide();
+            newBlock.TypeOfBlock = type;
+            AddType(newBlock);
 
             if (k == 0)
             {
-                papa = ((Block)((obj as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent);
+                papa = ((Block)((par as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent);
                 //MessageBox.Show(((Block)((obj as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent).ToString());
                 //papa = (obj as Control).Parent as Block;
+
             }
             else
-                papa = obj as Block;
+            {
+                papa = par as Block;
+                copyNodes(copy.myTreeView, newBlock.myTreeView);
+                newBlock.BlockData.Text = copy.BlockData.Text;
+            }
 
             if(papa.myParent!=null)
                 deda = papa.myParent;
@@ -213,10 +289,7 @@ namespace GOA
             }
 
             //вычисляем координаты для блока1 (середину)
-            first.Location = new Point(left.Location.X + (right.Location.X - left.Location.X) / 2, first.Location.Y);
-            newBlock.BlockData.Text = newBlock.Name;
-            newBlock.BlockData.Text = s;
-            AddType(newBlock, type);
+            first.Location = new Point(left.Location.X + (right.Location.X - left.Location.X) / 2, first.Location.Y);      
             Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().Controls.Add(newBlock);
 
 
