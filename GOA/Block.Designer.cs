@@ -56,7 +56,7 @@
             this.Extend.FlatAppearance.BorderSize = 0;
             this.Extend.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Extend.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Extend.Location = new System.Drawing.Point(123, 50);
+            this.Extend.Location = new System.Drawing.Point(144, 30);
             this.Extend.Name = "Extend";
             this.Extend.Size = new System.Drawing.Size(19, 18);
             this.Extend.TabIndex = 2;
@@ -66,10 +66,12 @@
             // BlockData
             // 
             this.BlockData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.BlockData.Location = new System.Drawing.Point(27, 3);
+            this.BlockData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BlockData.Location = new System.Drawing.Point(39, 6);
+            this.BlockData.MaxLength = 66;
             this.BlockData.Multiline = true;
             this.BlockData.Name = "BlockData";
-            this.BlockData.Size = new System.Drawing.Size(158, 47);
+            this.BlockData.Size = new System.Drawing.Size(122, 61);
             this.BlockData.TabIndex = 5;
             this.BlockData.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 

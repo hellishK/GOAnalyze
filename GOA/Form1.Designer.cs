@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.block1 = new GOA.Block();
@@ -59,6 +60,7 @@
             this.block1.Name = "block1";
             this.block1.Size = new System.Drawing.Size(188, 72);
             this.block1.TabIndex = 4;
+            this.block1.TypeOfBlock = null;
             // 
             // Form1
             // 
