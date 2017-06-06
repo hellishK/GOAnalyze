@@ -10,58 +10,28 @@ namespace GOA
 {
     public partial class Block : UserControl
     {
-        List<Block> childs = new List<Block>();
-        List<Block> branch = new List<Block>();
+        public List<Block> MyChilds = new List<Block>();
+        public List<Block> Branch = new List<Block>();
         public int lvl = 0;
         public int number = 0;
         public int margin = 30;
         public int newloc = 0;
         public Block first;
         public Block myParent;
-        private string typeOfBlock;
+        public string TypeOfBlock;
         ContextMenu add_menu = new ContextMenu();
         ContextMenu node_menu = new ContextMenu();
         ContextMenu node_menu_add = new ContextMenu();
         ContextMenu node_menu_del = new ContextMenu();
-        Tree myTreeView = new Tree();
-
-        public string TypeOfBlock
-        {
-            get { return typeOfBlock; }  
-            set { typeOfBlock = value;}
-        }
-
-        public List<Block> Branch
-        {
-            get { return branch; }
-            set { branch = value; }
-        }
-
-        public List<Block> Childs
-        {
-            get {return childs; }
-            set { childs = value; }
-        }
-
-        public Tree MyTreeView
-        {
-            get{return myTreeView;}
-            set{myTreeView = value;}
-        }
+        public Tree MyTreeView = new Tree();
+        TabControl tc;
 
         public Block()
         {
             InitializeComponent();
-            CreateAddMenu();
+            CreateAddMenu(); 
         }
 
-        //public Block(Block other)
-        //{
-        //    InitializeComponent();
-        //    CreateAddMenu();
-        //    this.BlockData.Text = other.BlockData.Text;
-        //    copyNodes(other.myTreeView, this.myTreeView);
-        //}
 
         public void CreateAddMenu()
         {
@@ -153,7 +123,6 @@ namespace GOA
 
         public void AddType(object obj)
         {
-            //MessageBox.Show(((Block)((((obj as MenuItem).GetContextMenu() as ContextMenu).SourceControl).Parent)).ToString());
             if ((obj as Block).TypeOfBlock == "position")
             { 
                 ((Block)obj).typePicture.BackgroundImage = new Bitmap(Properties.Resources.position_ico);
@@ -165,7 +134,6 @@ namespace GOA
                 ((Block)obj).Extend.Visible = true;
                 ((Block)obj).Extend.Click += Extend_Click;
             }
-            //MessageBox.Show((obj as Block).TypeOfBlock);
         }
 
         public void Add(object par, int k, Block copy, string type)
@@ -174,9 +142,10 @@ namespace GOA
             Block papa;
             Block deda;
             Block pra;
-            first = Form.ActiveForm.Controls.Find("block1", true).FirstOrDefault() as Block;
-            Block left = first;
-            Block right = first;
+            tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
+            newBlock.first = (Block)tc.SelectedTab.Controls.Find("block" + (tc.SelectedIndex +1) + "_1", false).FirstOrDefault();
+            Block left = newBlock.first;
+            Block right = newBlock.first;
 
             newBlock.MyTreeView.Hide();
             newBlock.TypeOfBlock = type;
@@ -184,12 +153,8 @@ namespace GOA
             
 
             if (k == 0)
-            {
                 papa = ((Block)((par as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent);
-                //MessageBox.Show(((Block)((obj as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent).ToString());
-                //papa = (obj as Control).Parent as Block;
 
-            }
             else
             {
                 papa = par as Block;
@@ -202,34 +167,23 @@ namespace GOA
   
             newBlock.myParent = papa;
             newBlock.lvl = papa.lvl + 1;
-            newBlock.ContextMenu = Form.ActiveForm.Controls.Find("block1", true).FirstOrDefault().ContextMenu;
-            newBlock.BlockData.ContextMenu = Form.ActiveForm.Controls.Find("block1", true).FirstOrDefault().ContextMenu;
-            newBlock.number = papa.childs.Count;
-            //int index = 1;
-
-            //if (papa != null && papa.myParent != null)
-            //{
-            //    foreach (Block ch in papa.myParent.childs)
-            //    {
-            //        if (papa.Name == ch.Name) break;
-            //        index++;
-            //    }
-            //}
-            newBlock.Name = "block" + newBlock.lvl + "-" + papa.number + "(" + (papa.childs.Count + 1) + ")";
-            //index = 0;
+            newBlock.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
+            newBlock.BlockData.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
+            newBlock.number = papa.MyChilds.Count;
+            newBlock.Name = "block" +(tc.SelectedIndex+1) + "_" + newBlock.lvl + "_" + papa.number + "(" + (papa.MyChilds.Count + 1) + ")";
            newBlock.BlockData.Text = newBlock.Name;
+
             // первый блок распологается непосредственно под родительским
-            if (papa.childs.Count == 0)
+            if (papa.MyChilds.Count == 0)
             {
                 newBlock.Location = new Point(papa.Location.X, papa.Location.Y + papa.Height + margin);
-                papa.childs.Add(newBlock);
+                papa.MyChilds.Add(newBlock);
 
                 pra = newBlock;
                 do
                 {
                     pra.Branch.Add(newBlock);
                     pra = pra.myParent;
-                    //MessageBox.Show("Добавили в ветку " + pra.Name);
                 }
                 while (pra != null);
             }
@@ -237,8 +191,8 @@ namespace GOA
             //все последующие - добавляются справа за последним элементом данного уровня
             else
             {
-                newBlock.Location = new Point(papa.childs[papa.childs.Count - 1].Location.X + papa.Width + margin, papa.childs[papa.childs.Count - 1].Location.Y);
-                papa.childs.Add(newBlock);
+                newBlock.Location = new Point(papa.MyChilds[papa.MyChilds.Count - 1].Location.X + papa.Width + margin, papa.MyChilds[papa.MyChilds.Count - 1].Location.Y);
+                papa.MyChilds.Add(newBlock);
 
                 pra = newBlock;
                 do
@@ -253,20 +207,20 @@ namespace GOA
                 if (papa.lvl == 1)
                 {
                     ////элементы размещаются по середине новое положение = середина_формы/2 - (колво_эл_2ур*ширина + отступ*(колво_эл_2ур - 2 (по одному отступу у первого и последнего)))/2
-                    //newloc = Form.ActiveForm.Size.Width / 2 - ((papa.Childs.Count) * (papa.Width) + margin * (papa.Childs.Count - 1)) / 2;
-                    //foreach (Block ch in papa.Childs)
+                    //newloc = Form.ActiveForm.Size.Width / 2 - ((papa.MyChilds.Count) * (papa.Width) + margin * (papa.MyChilds.Count - 1)) / 2;
+                    //foreach (Block ch in papa.MyChilds)
                     //{
                     //    ch.Location = new Point(newloc, ch.Location.Y);
                     //    newloc += papa.Width + margin;
                     //}
 
-                    right = papa.childs[papa.childs.Count - 2];
-                    while (right.childs.Count > 0)
+                    right = papa.MyChilds[papa.MyChilds.Count - 2];
+                    while (right.MyChilds.Count > 0)
                     {
-                        right = right.childs[right.childs.Count - 1];
+                        right = right.MyChilds[right.MyChilds.Count - 1];
                     }
 
-                    newBlock.Location = new Point(right.Location.X + right.Width + margin, papa.childs[papa.childs.Count - 2].Location.Y);
+                    newBlock.Location = new Point(right.Location.X + right.Width + margin, papa.MyChilds[papa.MyChilds.Count - 2].Location.Y);
                 }
 
                 //на последующие уровни - необходимо перемещать всех родителей и их родителей, находящихся справа...
@@ -276,8 +230,8 @@ namespace GOA
                     pra = papa;
                     while (pra.myParent != null)
                     {
-                        pra.Location = new Point(pra.childs[0].Location.X + (pra.childs[pra.childs.Count - 1].Location.X - pra.childs[0].Location.X) / 2, pra.Location.Y);
-                        //foreach (Block ch in pra.myParent.childs)
+                        pra.Location = new Point(pra.MyChilds[0].Location.X + (pra.MyChilds[pra.MyChilds.Count - 1].Location.X - pra.MyChilds[0].Location.X) / 2, pra.Location.Y);
+                        //foreach (Block ch in pra.myParent.MyChilds)
                         //{
                         //    index++;
                         //    if (pra.Name == ch.Name)
@@ -287,11 +241,11 @@ namespace GOA
                         //}
 
                         //берем всех правых братьев родителя
-                        for (int idx = pra.number+1; idx < pra.myParent.childs.Count; idx++)
+                        for (int idx = pra.number+1; idx < pra.myParent.MyChilds.Count; idx++)
                         {
                             //и двигаем ВСЮ ИХ ВЕТКУ вправа
 
-                            foreach (Block ch in pra.myParent.childs[idx].Branch)
+                            foreach (Block ch in pra.myParent.MyChilds[idx].Branch)
                             {
                                 ch.Location = new Point(ch.Location.X + pra.Width + margin, ch.Location.Y);
                             }
@@ -305,8 +259,8 @@ namespace GOA
             }
 
             //вычисляем координаты для блока1 (середину)
-            first.Location = new Point(first.childs[0].Location.X + (first.childs[first.childs.Count-1].Location.X - first.childs[0].Location.X) / 2, first.Location.Y);      
-            Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().Controls.Add(newBlock);
+            newBlock.first.Location = new Point(newBlock.first.MyChilds[0].Location.X + (newBlock.first.MyChilds[newBlock.first.MyChilds.Count-1].Location.X - newBlock.first.MyChilds[0].Location.X) / 2, newBlock.first.Location.Y);      
+            tc.TabPages[tc.SelectedIndex].Controls.Add(newBlock);
 
             drawLines();
 
@@ -318,14 +272,20 @@ namespace GOA
         //отрисовка соединительных линий
         public void drawLines()
         {
-            Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().Refresh();
+           
+            //MessageBox.Show("Отрисовал");
+            if (tc==null)
+                tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
+
+            tc.SelectedTab.Refresh();
             Pen pen = new Pen(Color.Black, 3);
-            Graphics formGraphics = Form.ActiveForm.Controls.Find("panel1", false).FirstOrDefault().CreateGraphics();
+            Graphics formGraphics = tc.SelectedTab.CreateGraphics();
             formGraphics.SmoothingMode = SmoothingMode.HighQuality;
             int x1, y1, x2, y2, x3, y3, x4, y4;
 
-            foreach (Block b in first.Branch)
+            foreach (Block b in this.first.Branch)
             {
+                //MessageBox.Show(b.Name);
                 if (b.myParent != null)
                 {
                     x1 = 15 + b.myParent.Location.X + b.Width / 2;

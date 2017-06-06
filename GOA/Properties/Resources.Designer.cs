@@ -85,7 +85,7 @@ namespace GOA.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap department_ico {
             get {
-                object obj = ResourceManager.GetObject("department-ico", resourceCulture);
+                object obj = ResourceManager.GetObject("department_ico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -95,7 +95,7 @@ namespace GOA.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap position_ico {
             get {
-                object obj = ResourceManager.GetObject("position-ico", resourceCulture);
+                object obj = ResourceManager.GetObject("position_ico", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

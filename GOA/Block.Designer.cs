@@ -32,7 +32,6 @@
             this.Extend = new System.Windows.Forms.Button();
             this.BlockData = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.cross = new System.Windows.Forms.Button();
             this.typePicture = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.typePicture)).BeginInit();
@@ -56,7 +55,7 @@
             this.Extend.FlatAppearance.BorderSize = 0;
             this.Extend.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Extend.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Extend.Location = new System.Drawing.Point(144, 30);
+            this.Extend.Location = new System.Drawing.Point(125, 50);
             this.Extend.Name = "Extend";
             this.Extend.Size = new System.Drawing.Size(19, 18);
             this.Extend.TabIndex = 2;
@@ -67,11 +66,11 @@
             // 
             this.BlockData.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.BlockData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BlockData.Location = new System.Drawing.Point(39, 6);
+            this.BlockData.Location = new System.Drawing.Point(27, 5);
             this.BlockData.MaxLength = 66;
             this.BlockData.Multiline = true;
             this.BlockData.Name = "BlockData";
-            this.BlockData.Size = new System.Drawing.Size(122, 61);
+            this.BlockData.Size = new System.Drawing.Size(157, 46);
             this.BlockData.TabIndex = 5;
             this.BlockData.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -85,21 +84,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(166, 70);
             this.panel1.TabIndex = 6;
-            // 
-            // cross
-            // 
-            this.cross.BackColor = System.Drawing.Color.White;
-            this.cross.BackgroundImage = global::GOA.Properties.Resources.cross;
-            this.cross.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.cross.FlatAppearance.BorderSize = 0;
-            this.cross.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cross.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cross.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.cross.Location = new System.Drawing.Point(174, 6);
-            this.cross.Name = "cross";
-            this.cross.Size = new System.Drawing.Size(10, 10);
-            this.cross.TabIndex = 3;
-            this.cross.UseVisualStyleBackColor = false;
             // 
             // typePicture
             // 
@@ -116,7 +100,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.Controls.Add(this.cross);
             this.Controls.Add(this.typePicture);
             this.Controls.Add(this.BlockData);
             this.Controls.Add(this.panel1);
@@ -133,7 +116,6 @@
         #endregion
         public System.Windows.Forms.Button AddChild;
         public System.Windows.Forms.Button Extend;
-        public System.Windows.Forms.Button cross;
         private System.Windows.Forms.PictureBox typePicture;
         private System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.TextBox BlockData;
