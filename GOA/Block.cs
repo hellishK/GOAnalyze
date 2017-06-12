@@ -25,6 +25,7 @@ namespace GOA
         ContextMenu node_menu_del = new ContextMenu();
         public Tree MyTreeView = new Tree();
         TabControl tc;
+        Graphics formGraphics;
 
         public Block()
         {
@@ -40,8 +41,8 @@ namespace GOA
             position.Click += AddPosition_Click;
             department.Click += AddDepartment_Click;
             add_menu.MenuItems.AddRange(new[] { position, department });
-            
         }
+
 
         public void Extend_Click(object sender, EventArgs e)
         {
@@ -168,6 +169,7 @@ namespace GOA
             newBlock.myParent = papa;
             newBlock.lvl = papa.lvl + 1;
             newBlock.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
+            newBlock.ContextMenu.MenuItems["Изменить тип блока"].Enabled = true;
             newBlock.BlockData.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
             newBlock.number = papa.MyChilds.Count;
             newBlock.Name = "block" +(tc.SelectedIndex+1) + "_" + newBlock.lvl + "_" + papa.number + "(" + (papa.MyChilds.Count + 1) + ")";
@@ -263,9 +265,7 @@ namespace GOA
             tc.TabPages[tc.SelectedIndex].Controls.Add(newBlock);
 
             drawLines();
-
-
-
+            ToCenter(newBlock.myParent);
         }
 
 
@@ -273,19 +273,23 @@ namespace GOA
         public void drawLines()
         {
            
-            //MessageBox.Show("Отрисовал");
             if (tc==null)
                 tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
-
-            tc.SelectedTab.Refresh();
+            
+            //tc.SelectedTab.Refresh();
+            
             Pen pen = new Pen(Color.Black, 3);
-            Graphics formGraphics = tc.SelectedTab.CreateGraphics();
+
+            if(formGraphics!=null)
+             formGraphics.Clear(SystemColors.Control);
+
+            formGraphics = tc.SelectedTab.CreateGraphics();
+            
             formGraphics.SmoothingMode = SmoothingMode.HighQuality;
             int x1, y1, x2, y2, x3, y3, x4, y4;
 
             foreach (Block b in this.first.Branch)
             {
-                //MessageBox.Show(b.Name);
                 if (b.myParent != null)
                 {
                     x1 = 15 + b.myParent.Location.X + b.Width / 2;
@@ -310,7 +314,17 @@ namespace GOA
                 }
             }
             pen.Dispose();
-            formGraphics.Dispose();
+            //formGraphics.Dispose();
+        }
+
+        public void ToCenter(Block b)
+        {
+            if (tc == null)
+                tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
+
+            tc.SelectedTab.AutoScrollPosition = b.Location;
+            //tc.SelectedTab.AutoScrollPosition = new Point(tc.SelectedTab.AutoScrollPosition.X+(tc.SelectedTab.AutoScrollPosition.X-b.Location.X), tc.SelectedTab.AutoScrollPosition.Y + (tc.SelectedTab.AutoScrollPosition.Y - b.Location.Y));
+            //MessageBox.Show("Позиция родителя - " + b.Location + ", Позиция скролла - ");
         }
     }
 }

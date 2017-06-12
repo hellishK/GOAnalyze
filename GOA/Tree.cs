@@ -48,7 +48,7 @@ namespace GOA
         public void AddNode_Click(object sender, EventArgs e)
         {
             TreeNode new_node = new TreeNode();
-           MessageBox.Show(treeView.SelectedNode.Text);
+
             if (treeView.SelectedNode.Level == 0)
             {
                 new_node.Text = "Новый процесс";
@@ -76,10 +76,7 @@ namespace GOA
         public void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
-            {
                 treeView.SelectedNode = e.Node;
-                //MessageBox.Show("Количество узлов - " + treeView.Nodes[0].Nodes.Count.ToString() + " Выделенный узел - " + e.Node.Text);
-            }
         }
 
         public void Tree_FormClosing(object sender, FormClosingEventArgs e)

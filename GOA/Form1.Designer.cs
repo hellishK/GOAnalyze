@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.org_name = new System.Windows.Forms.TextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.addPage = new System.Windows.Forms.TabPage();
@@ -37,13 +37,13 @@
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBox1
+            // org_name
             // 
-            this.textBox1.Location = new System.Drawing.Point(261, 12);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(631, 36);
-            this.textBox1.TabIndex = 1;
+            this.org_name.Location = new System.Drawing.Point(254, 12);
+            this.org_name.Multiline = true;
+            this.org_name.Name = "org_name";
+            this.org_name.Size = new System.Drawing.Size(631, 36);
+            this.org_name.TabIndex = 1;
             // 
             // tabControl
             // 
@@ -57,6 +57,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
             this.tabPage1.Controls.Add(this.block1_1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -64,22 +65,21 @@
             this.tabPage1.Size = new System.Drawing.Size(1121, 528);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Оргструктура1";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // addPage
             // 
+            this.addPage.BackColor = System.Drawing.SystemColors.Control;
             this.addPage.Location = new System.Drawing.Point(4, 22);
             this.addPage.Name = "addPage";
             this.addPage.Size = new System.Drawing.Size(1121, 528);
             this.addPage.TabIndex = 1;
             this.addPage.Text = "+";
-            this.addPage.UseVisualStyleBackColor = true;
             // 
             // block1_1
             // 
-            this.block1_1.BackColor = System.Drawing.Color.Transparent;
+            this.block1_1.BackColor = System.Drawing.SystemColors.Control;
             this.block1_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.block1_1.Location = new System.Drawing.Point(453, 15);
+            this.block1_1.Location = new System.Drawing.Point(447, 20);
             this.block1_1.Name = "block1_1";
             this.block1_1.Size = new System.Drawing.Size(190, 74);
             this.block1_1.TabIndex = 0;
@@ -88,12 +88,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1153, 630);
+            this.ClientSize = new System.Drawing.Size(1154, 631);
             this.Controls.Add(this.tabControl);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.org_name);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -102,7 +103,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox org_name;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage addPage;
