@@ -20,14 +20,17 @@ namespace GOA
         Block copyBlock;
         Block currentBlock;
         ContextMenu menu = new ContextMenu();
+        Results result = new Results();
         MenuItem mi_copy, mi_copy_block, mi_copy_branch, mi_paste, mi_paste_block_down, mi_paste_branch_down, mi_paste_block_excange, mi_paste_branch_excange, mi_delete, typeItem;
         bool isCopyBlock = false, isCopyBranch = false;
+         int id_org, id_str, id_par, id_block, id_node_par;
 
         private void Form1_Load(object sender, EventArgs e)
         {
             CreateMenu();
             block1_1.lvl = 1;
             block1_1.first = block1_1;
+            block1_1.Branch.Add(block1_1);
             block1_1.ContextMenu = menu;
             block1_1.BlockData.ContextMenu = menu;
             block1_1.Extend.Visible = false;
@@ -38,6 +41,14 @@ namespace GOA
             tabControl.Selected += addPage_Selected;
             tabControl.TabPages[0].Paint += Page_DrawLines;
             tabControl.TabPages[1].Paint += Page_DrawLines;
+
+            result.MaximizeBox = false;
+            result.dataGridView.Columns[0].HeaderText = "Показатель";
+            result.dataGridView.Rows.Add(4);
+            result.dataGridView.Rows[0].Cells[0].Value = "Информационная оценка";
+            result.dataGridView.Rows[1].Cells[0].Value = "Число состояний системы";
+            result.dataGridView.Rows[2].Cells[0].Value = "Коэффициент централизации";
+            result.dataGridView.Rows[3].Cells[0].Value = "Коэффициент децентрализации";
         }
 
         public void addPage_Selected(object sender, EventArgs e)
@@ -51,6 +62,7 @@ namespace GOA
                 nb.Extend.Visible = false;
                 nb.Name = "block" + tabControl.TabPages.Count + "_1";
                 nb.first = nb;
+                nb.Branch.Add(nb);
                 nb.Location = new Point(tabControl.SelectedTab.Width / 2 - nb.Width / 2, 15);
                 TabPage new_tp = new TabPage("+");
                 tabControl.TabPages[tabControl.TabPages.Count - 1].Text = "Оргструктура" + tabControl.TabPages.Count;
@@ -126,6 +138,139 @@ namespace GOA
             //    }
             //}
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int[] lvls = new int[15];
+            int cur_i = -1;     
+            //forms2.Add(result);
+            
+            Block first_here = (Block)tabControl.SelectedTab.Controls.Find("block" + (tabControl.SelectedIndex + 1) + "_1", false).FirstOrDefault();
+            foreach (Block b in first_here.Branch)
+            {
+                lvls[b.lvl]++;
+            }
+            
+            for (int i=0; i<result.dataGridView.Columns.Count; i++)
+            {
+                if (result.dataGridView.Columns[i].Name == tabControl.SelectedTab.Text)
+                {
+                    cur_i = i;
+                    break;
+                }     
+            }
+
+            if(cur_i==-1)
+            {
+                result.dataGridView.Columns.Add(tabControl.SelectedTab.Text, tabControl.SelectedTab.Text);
+                cur_i = result.dataGridView.Columns.Count - 1;
+            }
+
+            result.dataGridView.ColumnHeadersVisible = true;
+            MessageBox.Show(result.dataGridView.Columns.Count.ToString());
+            result.dataGridView.Rows[0].Cells[cur_i].Value = Math.Round(Math.Log10(first_here.Branch.Count), 3).ToString();
+            result.dataGridView.Rows[1].Cells[cur_i].Value = Math.Round(Math.Log(first_here.Branch.Count, 2), 3).ToString();
+            result.dataGridView.Rows[2].Cells[cur_i].Value = Math.Round(((double)lvls[2] / first_here.Branch.Count), 3).ToString();
+            //result.Width = Convert.ToInt32(result.inf_oc.Location.X) + result.inf_oc.Width + 100;
+            result.dataGridView.Rows[3].Cells[cur_i].Value = Math.Round(((double)lvls.Length / first_here.Branch.Count), 3).ToString();
+
+            result.Show();
+
+            //tabl.dataGridView1.Width = tabl.Width;
+            // tabl.Height = tabl.dataGridView1.Rows.Count * 20 + 79;
+            //tabl.button1.Location = new Point(tabl.Width - tabl.button1.Width, tabl.Height - tabl.button1.Height);
+            //tabl.Сохранить.Location = new Point(0, tabl.Height - tabl.Сохранить.Height);
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            oleDbConnection1.Open(); //открыть соединение
+                                     //заполнить таблицы в объекте DataSet
+            FuncAdapter.Fill(dataSet1.Функции);
+            OrgAdapter.Fill(dataSet1.Организации);
+            BlockAdapter.Fill(dataSet1.Блоки);
+            CharAdapter.Fill(dataSet1.Характеристики);
+            StructAdapter.Fill(dataSet1.Структуры);
+
+
+            string query = "Наименование='" + org_name.Text + "'";
+            DataRow[] res = dataSet1.Организации.Select(query);
+
+            if (res.Count() > 0)
+                id_org = (int)res[0]["Код"];
+
+            else
+            {
+                dataSet1.Организации.AddОрганизацииRow(org_name.Text);
+                id_org = (int)dataSet1.Организации.Rows[dataSet1.Организации.Rows.Count - 1]["Код"];
+                OrgAdapter.Update(dataSet1.Организации);
+            }
+
+            foreach (TabPage tp in tabControl.TabPages)
+            {
+                if (tp.Text == "+")
+                    break;
+                else
+                {
+                    dataSet1.Структуры.AddСтруктурыRow((DataSet1.ОрганизацииRow)dataSet1.Организации.Rows[id_org]["Код"]);
+                    StructAdapter.Update(dataSet1.Структуры);
+                    id_str = (DataSet1.СтруктурыRow)dataSet1.Структуры.Rows[dataSet1.Структуры.Rows.Count - 1];
+                    //MessageBox.Show(tabControl.TabPages.IndexOf(tp).ToString());
+                    Block first_here = (Block)tp.Controls.Find("block" + (tabControl.TabPages.IndexOf(tp) + 1) + "_1", false).FirstOrDefault();
+                    foreach (Block b in first_here.Branch)
+                    {
+
+                        if (b.myParent != null)
+                        {
+                            query = "Имя='" + b.myParent.BlockData.Text + "'";
+                            res = dataSet1.Блоки.Select(query);
+                            id_par = (DataSet1.БлокиRow)res[0];
+                            dataSet1.Блоки.AddБлокиRow((DataSet1.СтруктурыRow)id_str, b.lvl, b.number, b.BlockData.Text, (DataSet1.БлокиRow)id_par, b.TypeOfBlock);
+                            BlockAdapter.Update(dataSet1.Блоки);
+                        }
+                        else dataSet1.Блоки.AddБлокиRow((DataSet1.СтруктурыRow)id_str, b.lvl, b.number, b.BlockData.Text, null, b.TypeOfBlock);
+                        BlockAdapter.Update(dataSet1.Блоки);
+
+                        if (b.TypeOfBlock == "department")
+                        {
+                            id_block = (DataSet1.БлокиRow)dataSet1.Блоки.Rows[dataSet1.Блоки.Rows.Count - 1];
+
+                            foreach (TreeNode tn in b.MyTreeView.treeView.Nodes)
+                            {
+                                dataSet1.Функции.AddФункцииRow(null, tn.Text, (DataSet1.БлокиRow)id_block);
+                                FuncAdapter.Update(dataSet1.Функции);
+                                SaveNodes(tn, (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]);
+                            }
+                        }
+
+                        try
+                        {
+                            dataSet1.Характеристики.AddХарактеристикиRow((DataSet1.СтруктурыRow)id_str,
+                                Convert.ToSingle(result.dataGridView.Rows[0].Cells[tp.Text].Value), Convert.ToSingle(result.dataGridView.Rows[1].Cells[tp.Text].Value),
+                                Convert.ToSingle(result.dataGridView.Rows[2].Cells[tp.Text].Value), Convert.ToSingle(result.dataGridView.Rows[3].Cells[tp.Text].Value));
+                            CharAdapter.Update(dataSet1.Характеристики);
+                        }
+                        catch { }
+                    }
+                }
+            }        
+            oleDbConnection1.Close();
+        }
+
+
+        public void SaveNodes(TreeNode tn, DataSet1.ФункцииRow id)
+        {
+            id_node_par = (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1];
+
+            foreach (TreeNode tnch in tn.Nodes)
+            {
+                dataSet1.Функции.AddФункцииRow((DataSet1.ФункцииRow)id_node_par, tn.Text, (DataSet1.БлокиRow)id_block);
+                FuncAdapter.Update(dataSet1.Функции);
+                SaveNodes(tnch, (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]);
+            }
+        }
+
 
         public void HideChangeType(object sender, EventArgs e)
         {
