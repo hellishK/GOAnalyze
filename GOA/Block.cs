@@ -30,7 +30,7 @@ namespace GOA
         public Block()
         {
             InitializeComponent();
-            CreateAddMenu(); 
+            CreateAddMenu();
         }
 
 
@@ -103,7 +103,7 @@ namespace GOA
                 newTn.Text = tn.Text;
                 TreeNode newTn_child = new TreeNode();
                 newTn_child.Text = tn_child.Text;
-                copyChildNodes(tn_child, newTn_child); 
+                copyChildNodes(tn_child, newTn_child);
                 newTn.Nodes.Add(newTn_child);
             }
         }
@@ -125,7 +125,7 @@ namespace GOA
         public void AddType(object obj)
         {
             if ((obj as Block).TypeOfBlock == "position")
-            { 
+            {
                 ((Block)obj).typePicture.BackgroundImage = new Bitmap(Properties.Resources.position_ico);
                 ((Block)obj).Extend.Visible = false;
             }
@@ -139,19 +139,19 @@ namespace GOA
 
         public void Add(object par, int k, Block copy, string type)
         {
-            Block newBlock = new Block();       
+            Block newBlock = new Block();
             Block papa;
             Block deda;
             Block pra;
             tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
-            newBlock.first = (Block)tc.SelectedTab.Controls.Find("block" + (tc.SelectedIndex +1) + "_1", false).FirstOrDefault();
+            newBlock.first = (Block)tc.SelectedTab.Controls.Find("block" + (tc.SelectedIndex + 1) + "_1", false).FirstOrDefault();
             Block left = newBlock.first;
             Block right = newBlock.first;
 
             newBlock.MyTreeView.Hide();
             newBlock.TypeOfBlock = type;
             AddType(newBlock);
-            
+
 
             if (k == 0)
                 papa = ((Block)((par as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent);
@@ -163,17 +163,17 @@ namespace GOA
                 newBlock.BlockData.Text = copy.BlockData.Text;
             }
 
-            if(papa.myParent!=null)
+            if (papa.myParent != null)
                 deda = papa.myParent;
-  
+
             newBlock.myParent = papa;
             newBlock.lvl = papa.lvl + 1;
             newBlock.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
             newBlock.ContextMenu.MenuItems["Изменить тип блока"].Enabled = true;
             newBlock.BlockData.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
             newBlock.number = papa.MyChilds.Count;
-            newBlock.Name = "block" +(tc.SelectedIndex+1) + "_" + newBlock.lvl + "_" + papa.number + "(" + (papa.MyChilds.Count + 1) + ")";
-           newBlock.BlockData.Text = newBlock.Name;
+            newBlock.Name = "block" + (tc.SelectedIndex + 1) + "_" + newBlock.lvl + "_" + papa.number + "(" + (papa.MyChilds.Count + 1) + ")";
+            newBlock.BlockData.Text = newBlock.Name;
 
             // первый блок распологается непосредственно под родительским
             if (papa.MyChilds.Count == 0)
@@ -243,7 +243,7 @@ namespace GOA
                         //}
 
                         //берем всех правых братьев родителя
-                        for (int idx = pra.number+1; idx < pra.myParent.MyChilds.Count; idx++)
+                        for (int idx = pra.number + 1; idx < pra.myParent.MyChilds.Count; idx++)
                         {
                             //и двигаем ВСЮ ИХ ВЕТКУ вправа
 
@@ -257,11 +257,11 @@ namespace GOA
                         pra = pra.myParent;
                     }
 
-               }
+                }
             }
 
             //вычисляем координаты для блока1 (середину)
-            newBlock.first.Location = new Point(newBlock.first.MyChilds[0].Location.X + (newBlock.first.MyChilds[newBlock.first.MyChilds.Count-1].Location.X - newBlock.first.MyChilds[0].Location.X) / 2, newBlock.first.Location.Y);      
+            newBlock.first.Location = new Point(newBlock.first.MyChilds[0].Location.X + (newBlock.first.MyChilds[newBlock.first.MyChilds.Count - 1].Location.X - newBlock.first.MyChilds[0].Location.X) / 2, newBlock.first.Location.Y);
             tc.TabPages[tc.SelectedIndex].Controls.Add(newBlock);
 
             drawLines();
@@ -272,19 +272,19 @@ namespace GOA
         //отрисовка соединительных линий
         public void drawLines()
         {
-           
-            if (tc==null)
+
+            if (tc == null)
                 tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
-            
+
             //tc.SelectedTab.Refresh();
-            
+
             Pen pen = new Pen(Color.Black, 3);
 
-            if(formGraphics!=null)
-             formGraphics.Clear(SystemColors.Control);
+            if (formGraphics != null)
+                formGraphics.Clear(SystemColors.Control);
 
             formGraphics = tc.SelectedTab.CreateGraphics();
-            
+
             formGraphics.SmoothingMode = SmoothingMode.HighQuality;
             int x1, y1, x2, y2, x3, y3, x4, y4;
 

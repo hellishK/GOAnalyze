@@ -34,15 +34,15 @@ namespace GOA {
         
         private ХарактеристикиDataTable tableХарактеристики;
         
-        private global::System.Data.DataRelation relationFK_Блоки_Блоки;
-        
         private global::System.Data.DataRelation relationFK_Структуры_Блоки;
+        
+        private global::System.Data.DataRelation relationFK_Блоки_Блоки;
         
         private global::System.Data.DataRelation relationFK_Организации_Структуры;
         
-        private global::System.Data.DataRelation relationFK_Блоки_Функции;
-        
         private global::System.Data.DataRelation relationFK_Функции_Функции;
+        
+        private global::System.Data.DataRelation relationFK_Блоки_Функции;
         
         private global::System.Data.DataRelation relationFK_Структуры_Характеристики;
         
@@ -302,11 +302,11 @@ namespace GOA {
                     this.tableХарактеристики.InitVars();
                 }
             }
-            this.relationFK_Блоки_Блоки = this.Relations["FK_Блоки_Блоки"];
             this.relationFK_Структуры_Блоки = this.Relations["FK_Структуры_Блоки"];
+            this.relationFK_Блоки_Блоки = this.Relations["FK_Блоки_Блоки"];
             this.relationFK_Организации_Структуры = this.Relations["FK_Организации_Структуры"];
-            this.relationFK_Блоки_Функции = this.Relations["FK_Блоки_Функции"];
             this.relationFK_Функции_Функции = this.Relations["FK_Функции_Функции"];
+            this.relationFK_Блоки_Функции = this.Relations["FK_Блоки_Функции"];
             this.relationFK_Структуры_Характеристики = this.Relations["FK_Структуры_Характеристики"];
         }
         
@@ -329,16 +329,16 @@ namespace GOA {
             this.tableХарактеристики = new ХарактеристикиDataTable();
             base.Tables.Add(this.tableХарактеристики);
             global::System.Data.ForeignKeyConstraint fkc;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Блоки_Блоки", new global::System.Data.DataColumn[] {
-                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
-                        this.tableБлоки.РодительColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Структуры_Блоки", new global::System.Data.DataColumn[] {
+                        this.tableСтруктуры.КодColumn}, new global::System.Data.DataColumn[] {
+                        this.tableБлоки.СтруктураColumn});
             this.tableБлоки.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Структуры_Блоки", new global::System.Data.DataColumn[] {
-                        this.tableСтруктуры.КодColumn}, new global::System.Data.DataColumn[] {
-                        this.tableБлоки.СтруктураColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Блоки_Блоки", new global::System.Data.DataColumn[] {
+                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
+                        this.tableБлоки.РодительColumn});
             this.tableБлоки.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -350,16 +350,16 @@ namespace GOA {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Блоки_Функции", new global::System.Data.DataColumn[] {
-                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
-                        this.tableФункции.БлокColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Функции_Функции", new global::System.Data.DataColumn[] {
+                        this.tableФункции.КодColumn}, new global::System.Data.DataColumn[] {
+                        this.tableФункции.РодительColumn});
             this.tableФункции.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Функции_Функции", new global::System.Data.DataColumn[] {
-                        this.tableФункции.КодColumn}, new global::System.Data.DataColumn[] {
-                        this.tableФункции.РодительColumn});
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Блоки_Функции", new global::System.Data.DataColumn[] {
+                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
+                        this.tableФункции.БлокColumn});
             this.tableФункции.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
@@ -371,26 +371,26 @@ namespace GOA {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            this.relationFK_Блоки_Блоки = new global::System.Data.DataRelation("FK_Блоки_Блоки", new global::System.Data.DataColumn[] {
-                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
-                        this.tableБлоки.РодительColumn}, false);
-            this.Relations.Add(this.relationFK_Блоки_Блоки);
             this.relationFK_Структуры_Блоки = new global::System.Data.DataRelation("FK_Структуры_Блоки", new global::System.Data.DataColumn[] {
                         this.tableСтруктуры.КодColumn}, new global::System.Data.DataColumn[] {
                         this.tableБлоки.СтруктураColumn}, false);
             this.Relations.Add(this.relationFK_Структуры_Блоки);
+            this.relationFK_Блоки_Блоки = new global::System.Data.DataRelation("FK_Блоки_Блоки", new global::System.Data.DataColumn[] {
+                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
+                        this.tableБлоки.РодительColumn}, false);
+            this.Relations.Add(this.relationFK_Блоки_Блоки);
             this.relationFK_Организации_Структуры = new global::System.Data.DataRelation("FK_Организации_Структуры", new global::System.Data.DataColumn[] {
                         this.tableОрганизации.КодColumn}, new global::System.Data.DataColumn[] {
                         this.tableСтруктуры.ОрганизацияColumn}, false);
             this.Relations.Add(this.relationFK_Организации_Структуры);
-            this.relationFK_Блоки_Функции = new global::System.Data.DataRelation("FK_Блоки_Функции", new global::System.Data.DataColumn[] {
-                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
-                        this.tableФункции.БлокColumn}, false);
-            this.Relations.Add(this.relationFK_Блоки_Функции);
             this.relationFK_Функции_Функции = new global::System.Data.DataRelation("FK_Функции_Функции", new global::System.Data.DataColumn[] {
                         this.tableФункции.КодColumn}, new global::System.Data.DataColumn[] {
                         this.tableФункции.РодительColumn}, false);
             this.Relations.Add(this.relationFK_Функции_Функции);
+            this.relationFK_Блоки_Функции = new global::System.Data.DataRelation("FK_Блоки_Функции", new global::System.Data.DataColumn[] {
+                        this.tableБлоки.КодColumn}, new global::System.Data.DataColumn[] {
+                        this.tableФункции.БлокColumn}, false);
+            this.Relations.Add(this.relationFK_Блоки_Функции);
             this.relationFK_Структуры_Характеристики = new global::System.Data.DataRelation("FK_Структуры_Характеристики", new global::System.Data.DataColumn[] {
                         this.tableСтруктуры.КодColumn}, new global::System.Data.DataColumn[] {
                         this.tableХарактеристики.СтруктураColumn}, false);
@@ -2161,23 +2161,23 @@ namespace GOA {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public БлокиRow БлокиRowParent {
-                get {
-                    return ((БлокиRow)(this.GetParentRow(this.Table.ParentRelations["FK_Блоки_Блоки"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Блоки_Блоки"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public СтруктурыRow СтруктурыRow {
                 get {
                     return ((СтруктурыRow)(this.GetParentRow(this.Table.ParentRelations["FK_Структуры_Блоки"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_Структуры_Блоки"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public БлокиRow БлокиRowParent {
+                get {
+                    return ((БлокиRow)(this.GetParentRow(this.Table.ParentRelations["FK_Блоки_Блоки"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Блоки_Блоки"]);
                 }
             }
             
@@ -2503,23 +2503,23 @@ namespace GOA {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public БлокиRow БлокиRow {
-                get {
-                    return ((БлокиRow)(this.GetParentRow(this.Table.ParentRelations["FK_Блоки_Функции"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Блоки_Функции"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ФункцииRow ФункцииRowParent {
                 get {
                     return ((ФункцииRow)(this.GetParentRow(this.Table.ParentRelations["FK_Функции_Функции"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_Функции_Функции"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public БлокиRow БлокиRow {
+                get {
+                    return ((БлокиRow)(this.GetParentRow(this.Table.ParentRelations["FK_Блоки_Функции"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Блоки_Функции"]);
                 }
             }
             

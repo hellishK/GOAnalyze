@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,11 +20,12 @@ namespace GOA
 
         Block copyBlock;
         Block currentBlock;
+        OleDbCommand command;
         ContextMenu menu = new ContextMenu();
         Results result = new Results();
         MenuItem mi_copy, mi_copy_block, mi_copy_branch, mi_paste, mi_paste_block_down, mi_paste_branch_down, mi_paste_block_excange, mi_paste_branch_excange, mi_delete, typeItem;
         bool isCopyBlock = false, isCopyBranch = false;
-         int id_org, id_str, id_par, id_block, id_node_par;
+        int id_org, id_str, id_par, id_block, id_node_par;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -146,6 +148,7 @@ namespace GOA
             //forms2.Add(result);
             
             Block first_here = (Block)tabControl.SelectedTab.Controls.Find("block" + (tabControl.SelectedIndex + 1) + "_1", false).FirstOrDefault();
+
             foreach (Block b in first_here.Branch)
             {
                 lvls[b.lvl]++;
@@ -183,93 +186,216 @@ namespace GOA
 
         }
 
+
+
         private void button2_Click(object sender, EventArgs e)
         {
-            oleDbConnection1.Open(); //открыть соединение
-                                     //заполнить таблицы в объекте DataSet
-            FuncAdapter.Fill(dataSet1.Функции);
-            OrgAdapter.Fill(dataSet1.Организации);
-            BlockAdapter.Fill(dataSet1.Блоки);
-            CharAdapter.Fill(dataSet1.Характеристики);
-            StructAdapter.Fill(dataSet1.Структуры);
 
+            //OleDbConnection connection = new OleDbConnection();
+            command = new OleDbCommand();
+            OleDbDataReader reader;
+            oleDbConnection1.Open();  
+            command.Connection = oleDbConnection1;
+            string query= "Select @@Identity";
 
-            string query = "Наименование='" + org_name.Text + "'";
-            DataRow[] res = dataSet1.Организации.Select(query);
-
-            if (res.Count() > 0)
-                id_org = (int)res[0]["Код"];
+            command.CommandText = "SELECT (Код) FROM Организации WHERE (Наименование='" + org_name.Text + "')";
+            int res = command.ExecuteNonQuery();
+           
+            if (res > 0)
+            {
+                reader = command.ExecuteReader();
+                reader.Read();
+                id_org = reader.GetInt32(0);
+                reader.Close();
+                MessageBox.Show("найдена старая организация - " + id_org);
+            }
 
             else
             {
-                dataSet1.Организации.AddОрганизацииRow(org_name.Text);
-                id_org = (int)dataSet1.Организации.Rows[dataSet1.Организации.Rows.Count - 1]["Код"];
-                OrgAdapter.Update(dataSet1.Организации);
+                command.CommandText = "insert into Организации (наименование) values ('" + org_name.Text + "')";
+                command.ExecuteNonQuery();
+                command.CommandText = query;
+                id_org = (int)command.ExecuteScalar();
+
+                MessageBox.Show("добавлена новая организация - " + id_org);
             }
 
+           
             foreach (TabPage tp in tabControl.TabPages)
             {
                 if (tp.Text == "+")
                     break;
                 else
                 {
-                    dataSet1.Структуры.AddСтруктурыRow((DataSet1.ОрганизацииRow)dataSet1.Организации.Rows[id_org]["Код"]);
-                    StructAdapter.Update(dataSet1.Структуры);
-                    id_str = (DataSet1.СтруктурыRow)dataSet1.Структуры.Rows[dataSet1.Структуры.Rows.Count - 1];
-                    //MessageBox.Show(tabControl.TabPages.IndexOf(tp).ToString());
+
+                    command.CommandText = "insert into Структуры (Организация) values (" + id_org + ")";
+                    command.ExecuteNonQuery();
+                    command.CommandText = query;
+                    id_str = (int)command.ExecuteScalar();
+                    MessageBox.Show("Добавлена структура " + id_str + " для организации- " + id_org);
+
                     Block first_here = (Block)tp.Controls.Find("block" + (tabControl.TabPages.IndexOf(tp) + 1) + "_1", false).FirstOrDefault();
                     foreach (Block b in first_here.Branch)
                     {
-
+                        MessageBox.Show("Сохраняем блок " + b.Name);
                         if (b.myParent != null)
                         {
-                            query = "Имя='" + b.myParent.BlockData.Text + "'";
-                            res = dataSet1.Блоки.Select(query);
-                            id_par = (DataSet1.БлокиRow)res[0];
-                            dataSet1.Блоки.AddБлокиRow((DataSet1.СтруктурыRow)id_str, b.lvl, b.number, b.BlockData.Text, (DataSet1.БлокиRow)id_par, b.TypeOfBlock);
-                            BlockAdapter.Update(dataSet1.Блоки);
+
+                            command.CommandText = "SELECT (Код) FROM Блоки WHERE (Имя='" + b.myParent.BlockData.Text+ "') AND (Структура="+ id_str + ")";
+                            command.ExecuteNonQuery();
+                            reader = command.ExecuteReader();
+                            reader.Read();
+                            id_par = reader.GetInt32(0);
+                            reader.Close();
+
+                            command.CommandText = "insert into Блоки (Структура, Уровень, [Номер на уровне], Имя, Родитель, Тип) values (" + id_str + "," + b.lvl + "," + b.number + ",'" + b.BlockData.Text + "'," + id_par + ",'" + b.TypeOfBlock + "')";
+                            command.ExecuteNonQuery();
+                            command.CommandText = query;
+                            id_block = (int)command.ExecuteScalar();
+                            MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", родитель " + id_par);
                         }
-                        else dataSet1.Блоки.AddБлокиRow((DataSet1.СтруктурыRow)id_str, b.lvl, b.number, b.BlockData.Text, null, b.TypeOfBlock);
-                        BlockAdapter.Update(dataSet1.Блоки);
+                        else
+                        {
+                            command.CommandText = "insert into Блоки (Структура, Уровень, [Номер на уровне], Имя, Тип) values (" + id_str + "," + b.lvl + "," + b.number + ",'" + b.BlockData.Text + "','" + b.TypeOfBlock + "')";
+                            command.ExecuteNonQuery();
+                            command.CommandText = query;
+                            id_block = (int)command.ExecuteScalar();
+                            MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", без родителя ");
+                        }
 
                         if (b.TypeOfBlock == "department")
                         {
-                            id_block = (DataSet1.БлокиRow)dataSet1.Блоки.Rows[dataSet1.Блоки.Rows.Count - 1];
-
                             foreach (TreeNode tn in b.MyTreeView.treeView.Nodes)
                             {
-                                dataSet1.Функции.AddФункцииRow(null, tn.Text, (DataSet1.БлокиRow)id_block);
-                                FuncAdapter.Update(dataSet1.Функции);
-                                SaveNodes(tn, (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]);
+                                command.CommandText = "insert into Функции ( Наименование, Блок) values ('" + tn.Text + "'," + id_block + ")";
+                                command.ExecuteNonQuery();
+                                command.CommandText = query;
+                                id_node_par = (int)command.ExecuteScalar();
+                                MessageBox.Show("Добавлена функция " + id_node_par + " для блока " + id_block );
+                                SaveNodes(tn, id_node_par);
                             }
                         }
 
-                        try
-                        {
-                            dataSet1.Характеристики.AddХарактеристикиRow((DataSet1.СтруктурыRow)id_str,
-                                Convert.ToSingle(result.dataGridView.Rows[0].Cells[tp.Text].Value), Convert.ToSingle(result.dataGridView.Rows[1].Cells[tp.Text].Value),
-                                Convert.ToSingle(result.dataGridView.Rows[2].Cells[tp.Text].Value), Convert.ToSingle(result.dataGridView.Rows[3].Cells[tp.Text].Value));
-                            CharAdapter.Update(dataSet1.Характеристики);
-                        }
-                        catch { }
+
                     }
+
+                    command.CommandText = "insert into Характеристики (Структура, [Информационная оценка], [Число состояний системы], [Коэффициент централизации], [Коэффициент децентрализации]) values (" +
+                        id_str + ",'" + Convert.ToSingle(result.dataGridView.Rows[0].Cells[tp.Text].Value) + "','" + Convert.ToSingle(result.dataGridView.Rows[1].Cells[tp.Text].Value) + "','" +
+                        Convert.ToSingle(result.dataGridView.Rows[2].Cells[tp.Text].Value) + "','" + Convert.ToSingle(result.dataGridView.Rows[3].Cells[tp.Text].Value) + "')";
+                    command.ExecuteNonQuery(); ;
+                    MessageBox.Show("Добавлена характеристика для структуры " + id_str);
                 }
-            }        
+            }
             oleDbConnection1.Close();
         }
 
-
-        public void SaveNodes(TreeNode tn, DataSet1.ФункцииRow id)
+        public void SaveNodes(TreeNode tn, int id)
         {
-            id_node_par = (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1];
+            string query = "Select @@Identity";
+            int func = id;
 
             foreach (TreeNode tnch in tn.Nodes)
             {
-                dataSet1.Функции.AddФункцииRow((DataSet1.ФункцииRow)id_node_par, tn.Text, (DataSet1.БлокиRow)id_block);
-                FuncAdapter.Update(dataSet1.Функции);
-                SaveNodes(tnch, (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]);
+                command.CommandText = "insert into Функции (Родитель, Наименование, Блок) values (" + func + ",'" + tn.Text + "'," + id_block + ")";
+                command.ExecuteNonQuery();
+                command.CommandText = query;
+                MessageBox.Show("Добавлена функция " + (int)command.ExecuteScalar() + " для блока " +id_block + ", родитель " + func);
+                SaveNodes(tnch, (int)command.ExecuteScalar());
             }
         }
+
+
+
+
+        //private void button2_Click(object sender, EventArgs e)
+        //{
+        //    oleDbConnection1.Open(); //открыть соединение
+        //                             //заполнить таблицы в объекте DataSet
+        //    FuncAdapter.Fill(dataSet1.Функции);
+        //    OrgAdapter.Fill(dataSet1.Организации);
+        //    BlockAdapter.Fill(dataSet1.Блоки);
+        //    CharAdapter.Fill(dataSet1.Характеристики);
+        //    StructAdapter.Fill(dataSet1.Структуры);
+
+
+        //    string query = "Наименование='" + org_name.Text + "'";
+        //    DataRow[] res = dataSet1.Организации.Select(query);
+
+        //    if (res.Count() > 0)
+        //    {
+        //        id_org = (DataSet1.ОрганизацииRow)res[0];
+        //        MessageBox.Show("найдена старая организация - " + ((DataSet1.ОрганизацииRow)id_org).Наименование);
+        //    }
+
+        //    else
+        //    {
+        //        dataSet1.Организации.AddОрганизацииRow(org_name.Text);
+        //        OrgAdapter.Update(dataSet1.Организации);
+        //        id_org = (DataSet1.ОрганизацииRow)dataSet1.Организации.Rows[dataSet1.Организации.Rows.Count - 1];
+        //        MessageBox.Show("добавлена новая организация - " + ((DataSet1.ОрганизацииRow)id_org).Код);
+        //    }
+
+
+        //    foreach (TabPage tp in tabControl.TabPages)
+        //    {
+        //        if (tp.Text == "+")
+        //            break;
+        //        else
+        //        {
+
+        //            dataSet1.Структуры.AddСтруктурыRow((DataSet1.ОрганизацииRow)id_org);
+        //            StructAdapter.Update(dataSet1.Структуры);
+        //            id_str = (DataSet1.СтруктурыRow)dataSet1.Структуры.Rows[dataSet1.Структуры.Rows.Count - 1];
+        //            MessageBox.Show("Добавлена структура для организации- " + ((DataSet1.СтруктурыRow)id_str).Организация);
+        //            //MessageBox.Show(tabControl.TabPages.IndexOf(tp).ToString());
+        //            Block first_here = (Block)tp.Controls.Find("block" + (tabControl.TabPages.IndexOf(tp) + 1) + "_1", false).FirstOrDefault();
+        //            foreach (Block b in first_here.Branch)
+        //            {
+        //                MessageBox.Show("Сохраняем блок " + b.Name);
+        //                if (b.myParent != null)
+        //                {
+        //                    query = "Имя='" + b.myParent.BlockData.Text + "'";
+        //                    res = dataSet1.Блоки.Select(query);
+        //                    id_par = (DataSet1.БлокиRow)res[0];
+        //                    dataSet1.Блоки.AddБлокиRow((DataSet1.СтруктурыRow)id_str, b.lvl, b.number, b.BlockData.Text, (DataSet1.БлокиRow)id_par["Код"], b.TypeOfBlock);
+        //                    BlockAdapter.Update(dataSet1.Блоки);
+        //                    MessageBox.Show("Добавлен блок для структуры " + ((DataSet1.БлокиRow)dataSet1.Блоки.Rows[dataSet1.Блоки.Rows.Count - 1]).Структура + ", родитель " + ((DataSet1.БлокиRow)dataSet1.Блоки.Rows[dataSet1.Блоки.Rows.Count - 1]).Родитель);
+        //                }
+        //                else
+        //                {
+        //                    dataSet1.Блоки.AddБлокиRow((DataSet1.СтруктурыRow)id_str, b.lvl, b.number, b.BlockData.Text, null, b.TypeOfBlock);
+        //                    BlockAdapter.Update(dataSet1.Блоки);
+        //                    MessageBox.Show("Добавлен блок для структуры " + ((DataSet1.БлокиRow)dataSet1.Блоки.Rows[dataSet1.Блоки.Rows.Count - 1]).Структура + ", без родителя ");
+        //                }
+
+        //                if (b.TypeOfBlock == "department")
+        //                {
+        //                    id_block = (DataSet1.БлокиRow)dataSet1.Блоки.Rows[dataSet1.Блоки.Rows.Count - 1];
+
+        //                    foreach (TreeNode tn in b.MyTreeView.treeView.Nodes)
+        //                    {
+        //                        dataSet1.Функции.AddФункцииRow(null, tn.Text, (DataSet1.БлокиRow)id_block);
+        //                        FuncAdapter.Update(dataSet1.Функции);
+        //                        MessageBox.Show("Добавлена функция " + ((DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]).Наименование + " для блока " + ((DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]).Блок + ", родитель " + ((DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]).Родитель);
+        //                        SaveNodes(tn, (DataSet1.ФункцииRow)dataSet1.Функции.Rows[dataSet1.Функции.Rows.Count - 1]);
+        //                    }
+        //                }
+
+        //                try
+        //                {
+        //                    dataSet1.Характеристики.AddХарактеристикиRow((DataSet1.СтруктурыRow)id_str,
+        //                        Convert.ToSingle(result.dataGridView.Rows[0].Cells[tp.Text].Value), Convert.ToSingle(result.dataGridView.Rows[1].Cells[tp.Text].Value),
+        //                        Convert.ToSingle(result.dataGridView.Rows[2].Cells[tp.Text].Value), Convert.ToSingle(result.dataGridView.Rows[3].Cells[tp.Text].Value));
+        //                    CharAdapter.Update(dataSet1.Характеристики);
+        //                    MessageBox.Show("Добавлена характеристика для структуры " + ((DataSet1.ХарактеристикиRow)dataSet1.Характеристики.Rows[dataSet1.Характеристики.Rows.Count - 1]).Структура);
+        //                }
+        //                catch { }
+        //            }
+        //        }
+        //    }
+        //    oleDbConnection1.Close();
+        //}
+
 
 
         public void HideChangeType(object sender, EventArgs e)
