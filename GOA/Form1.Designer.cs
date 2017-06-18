@@ -49,9 +49,9 @@
             this.FuncAdapter = new System.Data.OleDb.OleDbDataAdapter();
             this.oleDbSelectCommand3 = new System.Data.OleDb.OleDbCommand();
             this.StructAdapter = new System.Data.OleDb.OleDbDataAdapter();
+            this.oleDbDeleteCommand = new System.Data.OleDb.OleDbCommand();
             this.oleDbInsertCommand = new System.Data.OleDb.OleDbCommand();
             this.oleDbUpdateCommand = new System.Data.OleDb.OleDbCommand();
-            this.oleDbDeleteCommand = new System.Data.OleDb.OleDbCommand();
             this.oleDbSelectCommand4 = new System.Data.OleDb.OleDbCommand();
             this.oleDbInsertCommand3 = new System.Data.OleDb.OleDbCommand();
             this.oleDbUpdateCommand3 = new System.Data.OleDb.OleDbCommand();
@@ -63,6 +63,7 @@
             this.oleDbDeleteCommand4 = new System.Data.OleDb.OleDbCommand();
             this.BlockAdapter = new System.Data.OleDb.OleDbDataAdapter();
             this.dataSet1 = new GOA.DataSet1();
+            this.OpenStruc = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
@@ -117,7 +118,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(949, 12);
+            this.button1.Location = new System.Drawing.Point(909, 10);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(111, 23);
             this.button1.TabIndex = 6;
@@ -127,7 +128,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(949, 41);
+            this.button2.Location = new System.Drawing.Point(1026, 10);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(111, 23);
             this.button2.TabIndex = 7;
@@ -284,6 +285,16 @@
                         new System.Data.Common.DataColumnMapping("Организация", "Организация")})});
             this.StructAdapter.UpdateCommand = this.oleDbUpdateCommand;
             // 
+            // oleDbDeleteCommand
+            // 
+            this.oleDbDeleteCommand.CommandText = "DELETE FROM `Структуры` WHERE ((`Код` = ?) AND ((? = 1 AND `Организация` IS NULL)" +
+    " OR (`Организация` = ?)))";
+            this.oleDbDeleteCommand.Connection = this.oleDbConnection1;
+            this.oleDbDeleteCommand.Parameters.AddRange(new System.Data.OleDb.OleDbParameter[] {
+            new System.Data.OleDb.OleDbParameter("Original_Код", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "Код", System.Data.DataRowVersion.Original, null),
+            new System.Data.OleDb.OleDbParameter("IsNull_Организация", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Организация", System.Data.DataRowVersion.Original, true, null),
+            new System.Data.OleDb.OleDbParameter("Original_Организация", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "Организация", System.Data.DataRowVersion.Original, null)});
+            // 
             // oleDbInsertCommand
             // 
             this.oleDbInsertCommand.CommandText = "INSERT INTO `Структуры` (`Организация`) VALUES (?)";
@@ -298,16 +309,6 @@
             this.oleDbUpdateCommand.Connection = this.oleDbConnection1;
             this.oleDbUpdateCommand.Parameters.AddRange(new System.Data.OleDb.OleDbParameter[] {
             new System.Data.OleDb.OleDbParameter("Организация", System.Data.OleDb.OleDbType.Integer, 0, "Организация"),
-            new System.Data.OleDb.OleDbParameter("Original_Код", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "Код", System.Data.DataRowVersion.Original, null),
-            new System.Data.OleDb.OleDbParameter("IsNull_Организация", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Организация", System.Data.DataRowVersion.Original, true, null),
-            new System.Data.OleDb.OleDbParameter("Original_Организация", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "Организация", System.Data.DataRowVersion.Original, null)});
-            // 
-            // oleDbDeleteCommand
-            // 
-            this.oleDbDeleteCommand.CommandText = "DELETE FROM `Структуры` WHERE ((`Код` = ?) AND ((? = 1 AND `Организация` IS NULL)" +
-    " OR (`Организация` = ?)))";
-            this.oleDbDeleteCommand.Connection = this.oleDbConnection1;
-            this.oleDbDeleteCommand.Parameters.AddRange(new System.Data.OleDb.OleDbParameter[] {
             new System.Data.OleDb.OleDbParameter("Original_Код", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "Код", System.Data.DataRowVersion.Original, null),
             new System.Data.OleDb.OleDbParameter("IsNull_Организация", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, ((byte)(0)), ((byte)(0)), "Организация", System.Data.DataRowVersion.Original, true, null),
             new System.Data.OleDb.OleDbParameter("Original_Организация", System.Data.OleDb.OleDbType.Integer, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "Организация", System.Data.DataRowVersion.Original, null)});
@@ -439,11 +440,22 @@
             this.dataSet1.DataSetName = "DataSet1";
             this.dataSet1.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // OpenStruc
+            // 
+            this.OpenStruc.Location = new System.Drawing.Point(956, 39);
+            this.OpenStruc.Name = "OpenStruc";
+            this.OpenStruc.Size = new System.Drawing.Size(111, 23);
+            this.OpenStruc.TabIndex = 8;
+            this.OpenStruc.Text = "Открыть";
+            this.OpenStruc.UseVisualStyleBackColor = true;
+            this.OpenStruc.Click += new System.EventHandler(this.OpenStruc_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1154, 631);
+            this.Controls.Add(this.OpenStruc);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl);
@@ -495,6 +507,7 @@
         private System.Data.OleDb.OleDbCommand oleDbDeleteCommand4;
         private System.Data.OleDb.OleDbDataAdapter BlockAdapter;
         private DataSet1 dataSet1;
+        private System.Windows.Forms.Button OpenStruc;
     }
 }
 

@@ -101,6 +101,7 @@ namespace GOA
             foreach (TreeNode tn_child in tn.Nodes)
             {
                 newTn.Text = tn.Text;
+                //newTn.Name = tn.Text;
                 TreeNode newTn_child = new TreeNode();
                 newTn_child.Text = tn_child.Text;
                 copyChildNodes(tn_child, newTn_child);
@@ -153,10 +154,10 @@ namespace GOA
             AddType(newBlock);
 
 
-            if (k == 0)
+            if (k == 0) //добавление вызвано кнопкой Добавить
                 papa = ((Block)((par as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.Parent);
 
-            else
+            else //добавление вызвано кнопкой Вставить или Открыть
             {
                 papa = par as Block;
                 copyNodes(copy.MyTreeView, newBlock.MyTreeView);
@@ -171,8 +172,8 @@ namespace GOA
             newBlock.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
             newBlock.ContextMenu.MenuItems["Изменить тип блока"].Enabled = true;
             newBlock.BlockData.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
-            newBlock.number = papa.MyChilds.Count;
-            newBlock.Name = "block" + (tc.SelectedIndex + 1) + "_" + newBlock.lvl + "_" + papa.number + "(" + (papa.MyChilds.Count + 1) + ")";
+            newBlock.number = papa.MyChilds.Count+1;
+            newBlock.Name = "block" + (tc.SelectedIndex + 1) + "_" + newBlock.lvl + "_" + papa.number + "(" + newBlock.number + ")";
             newBlock.BlockData.Text = newBlock.Name;
 
             // первый блок распологается непосредственно под родительским
@@ -243,7 +244,7 @@ namespace GOA
                         //}
 
                         //берем всех правых братьев родителя
-                        for (int idx = pra.number + 1; idx < pra.myParent.MyChilds.Count; idx++)
+                        for (int idx = pra.number ; idx < pra.myParent.MyChilds.Count; idx++)
                         {
                             //и двигаем ВСЮ ИХ ВЕТКУ вправа
 
@@ -262,7 +263,7 @@ namespace GOA
 
             //вычисляем координаты для блока1 (середину)
             newBlock.first.Location = new Point(newBlock.first.MyChilds[0].Location.X + (newBlock.first.MyChilds[newBlock.first.MyChilds.Count - 1].Location.X - newBlock.first.MyChilds[0].Location.X) / 2, newBlock.first.Location.Y);
-            tc.TabPages[tc.SelectedIndex].Controls.Add(newBlock);
+            tc.SelectedTab.Controls.Add(newBlock);
 
             drawLines();
             ToCenter(newBlock.myParent);
