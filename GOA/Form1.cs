@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace GOA
 {
@@ -23,10 +24,11 @@ namespace GOA
         Block currentBlock;
         OleDbCommand command;
         ContextMenu menu = new ContextMenu();
+        ContextMenu delPage = new ContextMenu();
         Results result = new Results();
-        MenuItem mi_copy, mi_copy_block, mi_copy_branch, mi_paste, mi_paste_block_down, mi_paste_branch_down, mi_paste_block_excange, mi_paste_branch_excange, mi_delete, typeItem;
+        MenuItem mi_copy, mi_copy_block, mi_copy_branch, mi_paste, mi_paste_block_down, mi_paste_branch_down, mi_paste_block_excange, mi_paste_branch_excange, mi_delete, typeItem, tp_delete;
         bool isCopyBlock = false, isCopyBranch = false;
-        int id_org, id_str, id_par, id_block, id_node_par, id_func=-1;
+        int id_org, id_str, id_par, id_block, id_node_par, currentTab;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -44,7 +46,6 @@ namespace GOA
             tabControl.Selected += addPage_Selected;
             tabControl.TabPages[0].Paint += Page_DrawLines;
             tabControl.TabPages[1].Paint += Page_DrawLines;
-
             result.MaximizeBox = false;
             result.dataGridView.Columns[0].HeaderText = "Показатель";
             result.dataGridView.Rows.Add(4);
@@ -56,8 +57,10 @@ namespace GOA
 
         public void addPage_Selected(object sender, EventArgs e)
         {
+
             if (tabControl.SelectedTab.Text == "+")
             {
+                currentTab = getNumber(tabControl.TabPages[tabControl.TabPages.Count - 2].Text)+1;
                 Block nb = new Block();
                 nb.lvl = 1;
                 nb.ContextMenu = menu;
@@ -68,8 +71,8 @@ namespace GOA
                 nb.Branch.Add(nb);
                 nb.Location = new Point(tabControl.SelectedTab.Width / 2 - nb.Width / 2, 15);
                 TabPage new_tp = new TabPage("+");
-                tabControl.TabPages[tabControl.TabPages.Count - 1].Text = "Оргструктура" + tabControl.TabPages.Count;
-                tabControl.TabPages[tabControl.TabPages.Count - 1].Name = "tabPage" + tabControl.TabPages.Count;
+                tabControl.TabPages[tabControl.TabPages.Count - 1].Text = "Оргструктура" + currentTab;
+                tabControl.TabPages[tabControl.TabPages.Count - 1].Name = "tabPage" + currentTab;
                 new_tp.Name = "addPage";
                 new_tp.Text = "+";
                 new_tp.Paint += Page_DrawLines;
@@ -80,14 +83,18 @@ namespace GOA
                 nb.drawLines();
             }
             else
-                ((Block)((TabControl)sender).SelectedTab.Controls.Find("block" + (tabControl.SelectedIndex + 1) + "_1", false).FirstOrDefault()).drawLines();
+            {
+                currentTab = getNumber(tabControl.SelectedTab.Text);
+                ((Block)((TabControl)sender).SelectedTab.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault()).drawLines();
+            }
         }
 
         public void Page_DrawLines(object sender, EventArgs e)
         {
             try
             {
-                ((Block)((TabPage)sender).Controls.Find("block" + (tabControl.SelectedIndex + 1) + "_1", false).FirstOrDefault()).drawLines();
+                currentTab = getNumber(tabControl.SelectedTab.Text);
+                ((Block)((TabPage)sender).Controls.Find("block" + currentTab + "_1", false).FirstOrDefault()).drawLines();
             }
             catch { }
         }
@@ -121,11 +128,36 @@ namespace GOA
             mi_copy.MenuItems.AddRange(new[] { mi_copy_block, mi_copy_branch });
             menu.MenuItems.AddRange(new[] { mi_copy, mi_paste, mi_delete, typeItem });
             menu.Popup += HideChangeType;
+
+            tp_delete = new MenuItem { Name = "Удалить структуру", Text = "Удалить структуру" };
+            tp_delete.Click += (sen,ee) => { tabControl.TabPages.Remove(tabControl.TabPages[(int)delPage.Tag]); } ;
+            delPage.MenuItems.Add(tp_delete);
+        }
+
+        private void tabControl_MouseUp(object sender, MouseEventArgs e)
+        {
+            // проверяем что нажата была правая кнопка
+            if (e.Button == MouseButtons.Right)
+            {
+                // проходим циклом по всем табам для поиска на котором был клик
+                for (int i = 0; i < tabControl.TabCount-1; i++)
+                {
+                    // получаем область таба и проверяем входит ли курсор в него или нет
+                    Rectangle r = tabControl.GetTabRect(i);
+                    if (r.Contains(e.Location))
+                    {
+                        // показываем контекстое меню и сохраняем номер таба                       
+                        delPage.Tag = i; // сохраняем номер таба
+                        tabControl.TabPages[i].Show();
+                        delPage.Show((sender as TabControl).TabPages[i], e.Location);
+                    }
+                }
+            }
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
-            tabControl.Size = new Size(Size.Width - 10, Size.Height - 140);
+            tabControl.Size = new Size(Size.Width - 30, Size.Height - 140);
             org_name.Location = new Point(Size.Width / 2 - org_name.Width / 2, 12);
 
             //if (Size.Height > 670)
@@ -142,13 +174,21 @@ namespace GOA
             //}
         }
 
+        int getNumber(string s)
+        {
+            Regex regex = new Regex(@"\D");
+            s = regex.Replace(s, "");            
+            return Convert.ToInt16(s);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             int[] lvls = new int[15];
-            int cur_i = -1;     
+            int cur_i = -1;
             //forms2.Add(result);
-            
-            Block first_here = (Block)tabControl.SelectedTab.Controls.Find("block" + (tabControl.SelectedIndex + 1) + "_1", false).FirstOrDefault();
+
+            currentTab = getNumber(tabControl.SelectedTab.Text);
+            Block first_here = (Block)tabControl.SelectedTab.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault();
 
             foreach (Block b in first_here.Branch)
             {
@@ -171,7 +211,6 @@ namespace GOA
             }
 
             result.dataGridView.ColumnHeadersVisible = true;
-            MessageBox.Show(result.dataGridView.Columns.Count.ToString());
             result.dataGridView.Rows[0].Cells[cur_i].Value = Math.Round(Math.Log10(first_here.Branch.Count), 3).ToString();
             result.dataGridView.Rows[1].Cells[cur_i].Value = Math.Round(Math.Log(first_here.Branch.Count, 2), 3).ToString();
             result.dataGridView.Rows[2].Cells[cur_i].Value = Math.Round(((double)lvls[2] / first_here.Branch.Count), 3).ToString();
@@ -249,15 +288,14 @@ namespace GOA
                     {
                         id_str = (int)reader_str["Код"];
                         MessageBox.Show(id_str.ToString());
-
-                        TabPage new_tp = new TabPage("tabPage" + tabControl.TabPages.Count);
-                        new_tp.Text = "Оргструктура " + (tabControl.TabPages.Count+1);
+                        currentTab = getNumber(tabControl.TabPages[tabControl.TabPages.Count - 1].Text) + 1;
+                        TabPage new_tp = new TabPage("tabPage" + currentTab);
+                        new_tp.Text = "Оргструктура " + currentTab;
                         new_tp.Paint += Page_DrawLines;
                         new_tp.AutoScroll = true;
                         new_tp.BackColor = SystemColors.Control;
                         tabControl.TabPages.Add(new_tp);
                         tabControl.SelectedTab = new_tp;
-                        MessageBox.Show(tabControl.SelectedTab.Text);
 
                         OleDbCommand command_block = new OleDbCommand();
                         command_block.Connection = oleDbConnection1;
@@ -270,20 +308,17 @@ namespace GOA
                         if (reader_block.HasRows)
                         {
                             reader_block.Read();
-                            MessageBox.Show(tabControl.SelectedTab.Text);
                             id_block = (int)reader_block["Код"];
-                            //MessageBox.Show(id_block.ToString());
-
+                            currentTab = getNumber(tabControl.TabPages[tabControl.TabPages.Count - 1].Text) + 1;
                             Block first_here = new Block();
                             first_here.lvl = (int)reader_block["Уровень"];
                             first_here.number = (int)reader_block["Номер на уровне"];
                             first_here.BlockData.Text = (string)reader_block["Имя"];
                             first_here.TypeOfBlock = "position";
-                           // first_here.AddType(first_here);
                             first_here.ContextMenu = menu;
                             first_here.BlockData.ContextMenu = menu;
                             first_here.Extend.Visible = false;
-                            first_here.Name = "block" + tabControl.TabPages.Count + "_1";
+                            first_here.Name = "block" + currentTab + "_1";
                             first_here.first = first_here;
                             first_here.Branch.Add(first_here);
                             first_here.Location = new Point(tabControl.SelectedTab.Width / 2 - first_here.Width / 2, 15);
@@ -297,7 +332,6 @@ namespace GOA
                             {
                                 while (reader_block.Read())
                                 {
-                                    MessageBox.Show(tabControl.SelectedTab.Text);
                                     Block nb = new Block();
                                     nb.lvl = (int)reader_block["b1.Уровень"];
                                     nb.number = (int)reader_block["b1.Номер на уровне"];
@@ -338,12 +372,12 @@ namespace GOA
                                     }
 
                                     Block par;
-                                    MessageBox.Show(tabControl.SelectedTab.Text);
+                                    currentTab = getNumber(tabControl.SelectedTab.Name);
 
                                     if (reader_block["b2.Родитель"] == DBNull.Value)
                                         par = first_here;
                                     else
-                                        par = (Block)tabControl.SelectedTab.Controls.Find("block" + (tabControl.SelectedIndex + 1).ToString() + "_" + ((int)reader_block["b2.Уровень"]).ToString() + "_" + ((int)reader_block["b3.Номер на уровне"]).ToString() + "(" + ((int)reader_block["b2.Номер на уровне"]).ToString() + ")", true).FirstOrDefault();
+                                        par = (Block)tabControl.SelectedTab.Controls.Find("block" + currentTab + "_" + ((int)reader_block["b2.Уровень"]).ToString() + "_" + ((int)reader_block["b3.Номер на уровне"]).ToString() + "(" + ((int)reader_block["b2.Номер на уровне"]).ToString() + ")", true).FirstOrDefault();
                                     par.Add(par, 1, nb, (string)reader_block["b1.Тип"]);
                                 }
                                 reader_block.Close();
@@ -351,6 +385,13 @@ namespace GOA
                         }
                     }
                     reader_str.Close();
+                    TabPage add_tp = new TabPage("+");
+                    add_tp.Name = "addPage";
+                    add_tp.Text = "+";
+                    add_tp.Paint += Page_DrawLines;
+                    add_tp.AutoScroll = true;
+                    add_tp.BackColor = SystemColors.Control;
+                    tabControl.TabPages.Add(add_tp);
                     tabControl.Selected += addPage_Selected;
                 }
 
@@ -408,8 +449,8 @@ namespace GOA
                     command.CommandText = query;
                     id_str = (int)command.ExecuteScalar();
                     //MessageBox.Show("Добавлена структура " + id_str + " для организации- " + id_org);
-
-                    Block first_here = (Block)tp.Controls.Find("block" + (tabControl.TabPages.IndexOf(tp) + 1) + "_1", false).FirstOrDefault();
+                    currentTab = getNumber(tp.Text);
+                    Block first_here = (Block)tp.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault();
                     foreach (Block b in first_here.Branch)
                     {
                        // MessageBox.Show("Сохраняем блок " + b.Name);
