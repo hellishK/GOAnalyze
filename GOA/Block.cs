@@ -25,8 +25,8 @@ namespace GOA
         ContextMenu node_menu_del = new ContextMenu();
         public Tree MyTreeView = new Tree();
         TabControl tc;
-        Graphics formGraphics;
-
+        public Graphics formGraphics;
+        
         public Block()
         {
             InitializeComponent();
@@ -314,7 +314,7 @@ namespace GOA
                     }
                 }
             }
-            pen.Dispose();
+            //pen.Dispose();
             //formGraphics.Dispose();
         }
 

@@ -32,10 +32,9 @@
             this.org_name = new System.Windows.Forms.TextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.block1_1 = new GOA.Block();
             this.addPage = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.AnalyzeStr = new System.Windows.Forms.Button();
+            this.SaveStruc = new System.Windows.Forms.Button();
             this.oleDbConnection1 = new System.Data.OleDb.OleDbConnection();
             this.oleDbSelectCommand1 = new System.Data.OleDb.OleDbCommand();
             this.oleDbInsertCommand1 = new System.Data.OleDb.OleDbCommand();
@@ -64,6 +63,9 @@
             this.BlockAdapter = new System.Data.OleDb.OleDbDataAdapter();
             this.dataSet1 = new GOA.DataSet1();
             this.OpenStruc = new System.Windows.Forms.Button();
+            this.ImgStr = new System.Windows.Forms.Button();
+            this.CreateReport = new System.Windows.Forms.Button();
+            this.block1_1 = new GOA.Block();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
@@ -71,27 +73,34 @@
             // 
             // org_name
             // 
+            this.org_name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.org_name.Location = new System.Drawing.Point(254, 12);
             this.org_name.Multiline = true;
             this.org_name.Name = "org_name";
             this.org_name.Size = new System.Drawing.Size(631, 36);
             this.org_name.TabIndex = 1;
+            this.org_name.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tabControl
             // 
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.addPage);
             this.tabControl.Location = new System.Drawing.Point(12, 64);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(1129, 554);
-            this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 5;
             this.tabControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tabControl_MouseUp);
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.AutoScroll = true;
+            this.tabPage1.BackColor = System.Drawing.Color.Transparent;
             this.tabPage1.Controls.Add(this.block1_1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -99,15 +108,6 @@
             this.tabPage1.Size = new System.Drawing.Size(1121, 528);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Оргструктура1";
-            // 
-            // block1_1
-            // 
-            this.block1_1.BackColor = System.Drawing.SystemColors.Control;
-            this.block1_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.block1_1.Location = new System.Drawing.Point(447, 20);
-            this.block1_1.Name = "block1_1";
-            this.block1_1.Size = new System.Drawing.Size(190, 74);
-            this.block1_1.TabIndex = 0;
             // 
             // addPage
             // 
@@ -118,25 +118,31 @@
             this.addPage.TabIndex = 1;
             this.addPage.Text = "+";
             // 
-            // button1
+            // AnalyzeStr
             // 
-            this.button1.Location = new System.Drawing.Point(909, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Анализировать";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.AnalyzeStr.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AnalyzeStr.FlatAppearance.BorderSize = 0;
+            this.AnalyzeStr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AnalyzeStr.Image = ((System.Drawing.Image)(resources.GetObject("AnalyzeStr.Image")));
+            this.AnalyzeStr.Location = new System.Drawing.Point(160, 12);
+            this.AnalyzeStr.Name = "AnalyzeStr";
+            this.AnalyzeStr.Size = new System.Drawing.Size(28, 28);
+            this.AnalyzeStr.TabIndex = 6;
+            this.AnalyzeStr.UseVisualStyleBackColor = true;
+            this.AnalyzeStr.Click += new System.EventHandler(this.AnalyzeStr_Click);
             // 
-            // button2
+            // SaveStruc
             // 
-            this.button2.Location = new System.Drawing.Point(1026, 10);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(111, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Сохранить";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.SaveStruc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SaveStruc.FlatAppearance.BorderSize = 0;
+            this.SaveStruc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SaveStruc.Image = ((System.Drawing.Image)(resources.GetObject("SaveStruc.Image")));
+            this.SaveStruc.Location = new System.Drawing.Point(64, 12);
+            this.SaveStruc.Name = "SaveStruc";
+            this.SaveStruc.Size = new System.Drawing.Size(28, 28);
+            this.SaveStruc.TabIndex = 7;
+            this.SaveStruc.UseVisualStyleBackColor = true;
+            this.SaveStruc.Click += new System.EventHandler(this.SaveStruc_Click);
             // 
             // oleDbConnection1
             // 
@@ -444,22 +450,62 @@
             // 
             // OpenStruc
             // 
-            this.OpenStruc.Location = new System.Drawing.Point(956, 39);
+            this.OpenStruc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OpenStruc.FlatAppearance.BorderSize = 0;
+            this.OpenStruc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OpenStruc.Image = ((System.Drawing.Image)(resources.GetObject("OpenStruc.Image")));
+            this.OpenStruc.Location = new System.Drawing.Point(16, 12);
             this.OpenStruc.Name = "OpenStruc";
-            this.OpenStruc.Size = new System.Drawing.Size(111, 23);
+            this.OpenStruc.Size = new System.Drawing.Size(33, 28);
             this.OpenStruc.TabIndex = 8;
-            this.OpenStruc.Text = "Открыть";
             this.OpenStruc.UseVisualStyleBackColor = true;
             this.OpenStruc.Click += new System.EventHandler(this.OpenStruc_Click);
+            // 
+            // ImgStr
+            // 
+            this.ImgStr.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ImgStr.FlatAppearance.BorderSize = 0;
+            this.ImgStr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ImgStr.Image = ((System.Drawing.Image)(resources.GetObject("ImgStr.Image")));
+            this.ImgStr.Location = new System.Drawing.Point(112, 12);
+            this.ImgStr.Name = "ImgStr";
+            this.ImgStr.Size = new System.Drawing.Size(28, 28);
+            this.ImgStr.TabIndex = 9;
+            this.ImgStr.UseVisualStyleBackColor = true;
+            this.ImgStr.Click += new System.EventHandler(this.ImgStr_Click);
+            // 
+            // CreateReport
+            // 
+            this.CreateReport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CreateReport.FlatAppearance.BorderSize = 0;
+            this.CreateReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CreateReport.Image = global::GOA.Properties.Resources.Report_mini;
+            this.CreateReport.Location = new System.Drawing.Point(205, 12);
+            this.CreateReport.Name = "CreateReport";
+            this.CreateReport.Size = new System.Drawing.Size(28, 28);
+            this.CreateReport.TabIndex = 10;
+            this.CreateReport.UseVisualStyleBackColor = true;
+            this.CreateReport.Click += new System.EventHandler(this.CreateReport_Click);
+            // 
+            // block1_1
+            // 
+            this.block1_1.BackColor = System.Drawing.SystemColors.Control;
+            this.block1_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.block1_1.Location = new System.Drawing.Point(447, 20);
+            this.block1_1.Name = "block1_1";
+            this.block1_1.Size = new System.Drawing.Size(190, 74);
+            this.block1_1.TabIndex = 0;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1154, 631);
+            this.Controls.Add(this.CreateReport);
+            this.Controls.Add(this.ImgStr);
             this.Controls.Add(this.OpenStruc);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.AnalyzeStr);
+            this.Controls.Add(this.SaveStruc);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.org_name);
             this.Name = "Form1";
@@ -480,8 +526,8 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage addPage;
         private Block block1_1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button AnalyzeStr;
+        private System.Windows.Forms.Button SaveStruc;
         private System.Data.OleDb.OleDbConnection oleDbConnection1;
         private System.Data.OleDb.OleDbCommand oleDbSelectCommand1;
         private System.Data.OleDb.OleDbCommand oleDbInsertCommand1;
@@ -510,6 +556,8 @@
         private System.Data.OleDb.OleDbDataAdapter BlockAdapter;
         private DataSet1 dataSet1;
         private System.Windows.Forms.Button OpenStruc;
+        private System.Windows.Forms.Button ImgStr;
+        private System.Windows.Forms.Button CreateReport;
     }
 }
 
