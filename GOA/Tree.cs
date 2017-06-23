@@ -14,10 +14,18 @@ namespace GOA
         public Tree()
         {
             InitializeComponent();
+            BackColor = Color.FromArgb(25, 107, 164);
+            treeView.BackColor = Color.FromArgb(25, 107, 164);
+            this.MouseDown += Form_MouseDown;
+            this.MouseMove += Form_MouseMove;
+            this.MouseUp += Form_MouseUp;
         }
         ContextMenu node_menu = new ContextMenu();
         ContextMenu node_menu_add = new ContextMenu();
         ContextMenu node_menu_del = new ContextMenu();
+        private bool isDragging = false;
+        private Point lastCursor;
+        private Point lastForm;
 
         public void Tree_Load(object sender, EventArgs e)
         {
@@ -25,6 +33,27 @@ namespace GOA
                 treeView.Nodes[0].ContextMenu = node_menu_add;
             treeView.NodeMouseClick += treeView_NodeMouseClick;
 
+        }
+
+        private void Form_MouseDown(object sender, MouseEventArgs e)
+        {
+            isDragging = true;
+
+            lastCursor = Cursor.Position;
+            lastForm = this.Location;
+        }
+
+        private void Form_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                this.Location = Point.Add(lastForm, new Size(Point.Subtract(Cursor.Position, new Size(lastCursor))));
+            }
+        }
+
+        private void Form_MouseUp(object sender, MouseEventArgs e)
+        {
+            isDragging = false;
         }
 
         public void CreateNodeMenu(ContextMenu node_menu, ContextMenu node_menu_add, ContextMenu node_menu_del)
@@ -83,6 +112,16 @@ namespace GOA
         {
             e.Cancel = true;
             this.Hide();
+        }
+
+        private void CrossButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void RollButton_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }

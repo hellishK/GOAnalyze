@@ -73,6 +73,16 @@ namespace GOA.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap back {
+            get {
+                object obj = ResourceManager.GetObject("back", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Camera_mini {
             get {
                 object obj = ResourceManager.GetObject("Camera_mini", resourceCulture);
@@ -86,16 +96,6 @@ namespace GOA.Properties {
         internal static System.Drawing.Bitmap cross {
             get {
                 object obj = ResourceManager.GetObject("cross", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap department {
-            get {
-                object obj = ResourceManager.GetObject("department", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -135,7 +135,7 @@ namespace GOA.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Report_mini {
             get {
-                object obj = ResourceManager.GetObject("Report-mini", resourceCulture);
+                object obj = ResourceManager.GetObject("Report_mini", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace GOA.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Save {
+        internal static System.Drawing.Bitmap roll {
             get {
-                object obj = ResourceManager.GetObject("Save", resourceCulture);
+                object obj = ResourceManager.GetObject("roll", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -156,6 +156,26 @@ namespace GOA.Properties {
         internal static System.Drawing.Bitmap Save_mini {
             get {
                 object obj = ResourceManager.GetObject("Save_mini", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap size_max {
+            get {
+                object obj = ResourceManager.GetObject("size_max", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap size_min {
+            get {
+                object obj = ResourceManager.GetObject("size_min", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

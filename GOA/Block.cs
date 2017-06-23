@@ -31,6 +31,8 @@ namespace GOA
         {
             InitializeComponent();
             CreateAddMenu();
+            AddChild.ForeColor = Color.FromArgb(102, 102, 102);
+            Extend.ForeColor = Color.FromArgb(102, 102, 102);
         }
 
 
@@ -266,7 +268,6 @@ namespace GOA
             tc.SelectedTab.Controls.Add(newBlock);
 
             drawLines();
-            ToCenter(newBlock.myParent);
         }
 
 
@@ -279,10 +280,10 @@ namespace GOA
 
             //tc.SelectedTab.Refresh();
 
-            Pen pen = new Pen(Color.Black, 3);
+            Pen pen = new Pen(Color.FromArgb(102,102,102), 3);
 
             if (formGraphics != null)
-                formGraphics.Clear(SystemColors.Control);
+                formGraphics.Clear(Color.FromArgb(206, 203, 247));
 
             formGraphics = tc.SelectedTab.CreateGraphics();
 
@@ -316,16 +317,6 @@ namespace GOA
             }
             //pen.Dispose();
             //formGraphics.Dispose();
-        }
-
-        public void ToCenter(Block b)
-        {
-            if (tc == null)
-                tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
-
-            tc.SelectedTab.AutoScrollPosition = b.Location;
-            //tc.SelectedTab.AutoScrollPosition = new Point(tc.SelectedTab.AutoScrollPosition.X+(tc.SelectedTab.AutoScrollPosition.X-b.Location.X), tc.SelectedTab.AutoScrollPosition.Y + (tc.SelectedTab.AutoScrollPosition.Y - b.Location.Y));
-            //MessageBox.Show("Позиция родителя - " + b.Location + ", Позиция скролла - ");
         }
     }
 }

@@ -40,7 +40,7 @@
             // AddChild
             // 
             this.AddChild.FlatAppearance.BorderSize = 0;
-            this.AddChild.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.AddChild.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AddChild.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.AddChild.Location = new System.Drawing.Point(144, 50);
             this.AddChild.Name = "AddChild";
@@ -53,7 +53,7 @@
             // Extend
             // 
             this.Extend.FlatAppearance.BorderSize = 0;
-            this.Extend.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.Extend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Extend.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Extend.Location = new System.Drawing.Point(125, 50);
             this.Extend.Name = "Extend";
@@ -77,7 +77,6 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.AddChild);
             this.panel1.Controls.Add(this.Extend);
             this.panel1.Location = new System.Drawing.Point(22, 1);
@@ -98,7 +97,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.FromArgb(206, 203, 247);
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Controls.Add(this.typePicture);
             this.Controls.Add(this.BlockData);

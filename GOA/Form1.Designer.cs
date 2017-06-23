@@ -32,6 +32,7 @@
             this.org_name = new System.Windows.Forms.TextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.block1_1 = new GOA.Block();
             this.addPage = new System.Windows.Forms.TabPage();
             this.AnalyzeStr = new System.Windows.Forms.Button();
             this.SaveStruc = new System.Windows.Forms.Button();
@@ -65,7 +66,9 @@
             this.OpenStruc = new System.Windows.Forms.Button();
             this.ImgStr = new System.Windows.Forms.Button();
             this.CreateReport = new System.Windows.Forms.Button();
-            this.block1_1 = new GOA.Block();
+            this.CrossButton = new System.Windows.Forms.Button();
+            this.SizeButton = new System.Windows.Forms.Button();
+            this.RollButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
@@ -75,11 +78,15 @@
             // 
             this.org_name.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.org_name.Location = new System.Drawing.Point(254, 12);
+            this.org_name.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.org_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.org_name.ForeColor = System.Drawing.Color.White;
+            this.org_name.Location = new System.Drawing.Point(284, 74);
             this.org_name.Multiline = true;
             this.org_name.Name = "org_name";
-            this.org_name.Size = new System.Drawing.Size(631, 36);
+            this.org_name.Size = new System.Drawing.Size(773, 36);
             this.org_name.TabIndex = 1;
+            this.org_name.Text = "Введите наименование организации";
             this.org_name.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // tabControl
@@ -89,10 +96,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPage1);
             this.tabControl.Controls.Add(this.addPage);
-            this.tabControl.Location = new System.Drawing.Point(12, 64);
+            this.tabControl.Location = new System.Drawing.Point(5, 160);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1129, 554);
+            this.tabControl.Size = new System.Drawing.Size(1148, 597);
             this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 5;
             this.tabControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tabControl_MouseUp);
@@ -105,43 +112,54 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1121, 528);
+            this.tabPage1.Size = new System.Drawing.Size(1140, 571);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Оргструктура1";
             // 
+            // block1_1
+            // 
+            this.block1_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(203)))), ((int)(((byte)(247)))));
+            this.block1_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.block1_1.Location = new System.Drawing.Point(506, 31);
+            this.block1_1.Name = "block1_1";
+            this.block1_1.Size = new System.Drawing.Size(190, 74);
+            this.block1_1.TabIndex = 0;
+            // 
             // addPage
             // 
-            this.addPage.BackColor = System.Drawing.SystemColors.Control;
+            this.addPage.BackColor = System.Drawing.Color.Transparent;
             this.addPage.Location = new System.Drawing.Point(4, 22);
             this.addPage.Name = "addPage";
-            this.addPage.Size = new System.Drawing.Size(1121, 528);
+            this.addPage.Size = new System.Drawing.Size(1140, 571);
             this.addPage.TabIndex = 1;
             this.addPage.Text = "+";
             // 
             // AnalyzeStr
             // 
+            this.AnalyzeStr.BackColor = System.Drawing.Color.Transparent;
             this.AnalyzeStr.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AnalyzeStr.FlatAppearance.BorderSize = 0;
             this.AnalyzeStr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AnalyzeStr.Image = ((System.Drawing.Image)(resources.GetObject("AnalyzeStr.Image")));
-            this.AnalyzeStr.Location = new System.Drawing.Point(160, 12);
+            this.AnalyzeStr.Location = new System.Drawing.Point(140, 50);
             this.AnalyzeStr.Name = "AnalyzeStr";
             this.AnalyzeStr.Size = new System.Drawing.Size(28, 28);
             this.AnalyzeStr.TabIndex = 6;
-            this.AnalyzeStr.UseVisualStyleBackColor = true;
+            this.AnalyzeStr.UseVisualStyleBackColor = false;
             this.AnalyzeStr.Click += new System.EventHandler(this.AnalyzeStr_Click);
             // 
             // SaveStruc
             // 
+            this.SaveStruc.BackColor = System.Drawing.Color.Transparent;
             this.SaveStruc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.SaveStruc.FlatAppearance.BorderSize = 0;
             this.SaveStruc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SaveStruc.Image = ((System.Drawing.Image)(resources.GetObject("SaveStruc.Image")));
-            this.SaveStruc.Location = new System.Drawing.Point(64, 12);
+            this.SaveStruc.Location = new System.Drawing.Point(64, 103);
             this.SaveStruc.Name = "SaveStruc";
             this.SaveStruc.Size = new System.Drawing.Size(28, 28);
             this.SaveStruc.TabIndex = 7;
-            this.SaveStruc.UseVisualStyleBackColor = true;
+            this.SaveStruc.UseVisualStyleBackColor = false;
             this.SaveStruc.Click += new System.EventHandler(this.SaveStruc_Click);
             // 
             // oleDbConnection1
@@ -450,57 +468,108 @@
             // 
             // OpenStruc
             // 
+            this.OpenStruc.BackColor = System.Drawing.Color.Transparent;
+            this.OpenStruc.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.OpenStruc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.OpenStruc.FlatAppearance.BorderSize = 0;
             this.OpenStruc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.OpenStruc.Image = ((System.Drawing.Image)(resources.GetObject("OpenStruc.Image")));
-            this.OpenStruc.Location = new System.Drawing.Point(16, 12);
+            this.OpenStruc.Location = new System.Drawing.Point(12, 103);
             this.OpenStruc.Name = "OpenStruc";
             this.OpenStruc.Size = new System.Drawing.Size(33, 28);
             this.OpenStruc.TabIndex = 8;
-            this.OpenStruc.UseVisualStyleBackColor = true;
+            this.OpenStruc.UseVisualStyleBackColor = false;
             this.OpenStruc.Click += new System.EventHandler(this.OpenStruc_Click);
             // 
             // ImgStr
             // 
+            this.ImgStr.BackColor = System.Drawing.Color.Transparent;
             this.ImgStr.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ImgStr.FlatAppearance.BorderSize = 0;
             this.ImgStr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.ImgStr.Image = ((System.Drawing.Image)(resources.GetObject("ImgStr.Image")));
-            this.ImgStr.Location = new System.Drawing.Point(112, 12);
+            this.ImgStr.Location = new System.Drawing.Point(113, 82);
             this.ImgStr.Name = "ImgStr";
             this.ImgStr.Size = new System.Drawing.Size(28, 28);
             this.ImgStr.TabIndex = 9;
-            this.ImgStr.UseVisualStyleBackColor = true;
+            this.ImgStr.UseVisualStyleBackColor = false;
             this.ImgStr.Click += new System.EventHandler(this.ImgStr_Click);
             // 
             // CreateReport
             // 
+            this.CreateReport.BackColor = System.Drawing.Color.Transparent;
+            this.CreateReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CreateReport.Cursor = System.Windows.Forms.Cursors.Hand;
             this.CreateReport.FlatAppearance.BorderSize = 0;
             this.CreateReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CreateReport.Image = global::GOA.Properties.Resources.Report_mini;
-            this.CreateReport.Location = new System.Drawing.Point(205, 12);
+            this.CreateReport.Image = ((System.Drawing.Image)(resources.GetObject("CreateReport.Image")));
+            this.CreateReport.Location = new System.Drawing.Point(157, 8);
             this.CreateReport.Name = "CreateReport";
             this.CreateReport.Size = new System.Drawing.Size(28, 28);
             this.CreateReport.TabIndex = 10;
-            this.CreateReport.UseVisualStyleBackColor = true;
+            this.CreateReport.UseVisualStyleBackColor = false;
             this.CreateReport.Click += new System.EventHandler(this.CreateReport_Click);
             // 
-            // block1_1
+            // CrossButton
             // 
-            this.block1_1.BackColor = System.Drawing.SystemColors.Control;
-            this.block1_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.block1_1.Location = new System.Drawing.Point(447, 20);
-            this.block1_1.Name = "block1_1";
-            this.block1_1.Size = new System.Drawing.Size(190, 74);
-            this.block1_1.TabIndex = 0;
+            this.CrossButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.CrossButton.BackColor = System.Drawing.Color.Transparent;
+            this.CrossButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.CrossButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CrossButton.FlatAppearance.BorderSize = 0;
+            this.CrossButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CrossButton.Image = ((System.Drawing.Image)(resources.GetObject("CrossButton.Image")));
+            this.CrossButton.Location = new System.Drawing.Point(1130, 2);
+            this.CrossButton.Name = "CrossButton";
+            this.CrossButton.Size = new System.Drawing.Size(20, 20);
+            this.CrossButton.TabIndex = 11;
+            this.CrossButton.UseVisualStyleBackColor = false;
+            this.CrossButton.Click += new System.EventHandler(this.CrossButton_Click);
+            // 
+            // SizeButton
+            // 
+            this.SizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.SizeButton.BackColor = System.Drawing.Color.Transparent;
+            this.SizeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.SizeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SizeButton.FlatAppearance.BorderSize = 0;
+            this.SizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SizeButton.Image = global::GOA.Properties.Resources.size_max;
+            this.SizeButton.Location = new System.Drawing.Point(1106, 2);
+            this.SizeButton.Name = "SizeButton";
+            this.SizeButton.Size = new System.Drawing.Size(20, 20);
+            this.SizeButton.TabIndex = 12;
+            this.SizeButton.UseVisualStyleBackColor = false;
+            this.SizeButton.Click += new System.EventHandler(this.SizeButton_Click);
+            // 
+            // RollButton
+            // 
+            this.RollButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RollButton.BackColor = System.Drawing.Color.Transparent;
+            this.RollButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.RollButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.RollButton.FlatAppearance.BorderSize = 0;
+            this.RollButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.RollButton.Image = global::GOA.Properties.Resources.roll;
+            this.RollButton.Location = new System.Drawing.Point(1084, 2);
+            this.RollButton.Name = "RollButton";
+            this.RollButton.Size = new System.Drawing.Size(20, 20);
+            this.RollButton.TabIndex = 13;
+            this.RollButton.UseVisualStyleBackColor = false;
+            this.RollButton.Click += new System.EventHandler(this.RollButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1154, 631);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(1154, 760);
+            this.ControlBox = false;
+            this.Controls.Add(this.RollButton);
+            this.Controls.Add(this.SizeButton);
+            this.Controls.Add(this.CrossButton);
             this.Controls.Add(this.CreateReport);
             this.Controls.Add(this.ImgStr);
             this.Controls.Add(this.OpenStruc);
@@ -508,6 +577,7 @@
             this.Controls.Add(this.SaveStruc);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.org_name);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -525,7 +595,6 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage addPage;
-        private Block block1_1;
         private System.Windows.Forms.Button AnalyzeStr;
         private System.Windows.Forms.Button SaveStruc;
         private System.Data.OleDb.OleDbConnection oleDbConnection1;
@@ -558,6 +627,10 @@
         private System.Windows.Forms.Button OpenStruc;
         private System.Windows.Forms.Button ImgStr;
         private System.Windows.Forms.Button CreateReport;
+        private Block block1_1;
+        private System.Windows.Forms.Button CrossButton;
+        private System.Windows.Forms.Button SizeButton;
+        private System.Windows.Forms.Button RollButton;
     }
 }
 

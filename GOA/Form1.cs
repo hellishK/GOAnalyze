@@ -32,6 +32,10 @@ namespace GOA
         MenuItem mi_copy, mi_copy_block, mi_copy_branch, mi_paste, mi_paste_block_down, mi_paste_branch_down, mi_paste_block_excange, mi_paste_branch_excange, mi_delete, typeItem, tp_delete;
         bool isCopyBlock = false, isCopyBranch = false;
         int id_org, id_str, id_par, id_block, id_node_par, currentTab;
+        int pos_x, pos_y;
+        private bool isDragging = false;
+        private Point lastCursor;
+        private Point lastForm;
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -47,11 +51,16 @@ namespace GOA
             tabPage1.AutoScrollMinSize = new System.Drawing.Size(3000, 3000);
             block1_1.Location = new Point(1500, 20);
             tabPage1.AutoScrollPosition = new Point(1500 - tabControl.Width / 2 + block1_1.Width / 2, 0);
+            tabPage1.SetAutoScrollMargin((tabControl.Width-block1_1.Width)/2, 0);
             //block1_1.Location = new Point(1000, 15);
             //tabPage1.Size = new Size(2000, 1500);
             tabControl.Selected += addPage_Selected;
             tabControl.TabPages[0].Paint += Page_DrawLines;
             tabControl.TabPages[1].Paint += Page_DrawLines;
+            tabControl.TabPages[0].BackColor = Color.FromArgb(206, 203, 247);
+            tabControl.TabPages[1].BackColor = Color.FromArgb(206, 203, 247);
+            tabControl.TabPages[0].AutoScrollPosition = new Point(1500 - tabControl.Width / 2 + block1_1.Width / 2, 0);
+            tabControl.TabPages[1].AutoScrollPosition = new Point(1500 - tabControl.Width / 2 + block1_1.Width / 2, 0);
             result.MaximizeBox = false;
             result.dataGridView.Columns[0].HeaderText = "Показатель";
             result.dataGridView.Rows.Add(4);
@@ -59,6 +68,32 @@ namespace GOA
             result.dataGridView.Rows[1].Cells[0].Value = "Число состояний системы";
             result.dataGridView.Rows[2].Cells[0].Value = "Коэффициент централизации";
             result.dataGridView.Rows[3].Cells[0].Value = "Коэффициент децентрализации";
+            this.BackColor = Color.FromArgb(25, 107, 164);
+            org_name.BackColor = Color.FromArgb(25, 107, 164);
+            this.MouseDown += Form_MouseDown;
+            this.MouseMove += Form_MouseMove;
+            this.MouseUp += Form_MouseUp;
+        }
+
+        private void Form_MouseDown(object sender, MouseEventArgs e)
+        {
+            isDragging = true;
+
+            lastCursor = Cursor.Position;
+            lastForm = this.Location;
+        }
+
+        private void Form_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging)
+            {
+                this.Location = Point.Add(lastForm, new Size(Point.Subtract(Cursor.Position, new Size(lastCursor))));
+            }
+        }
+
+        private void Form_MouseUp(object sender, MouseEventArgs e)
+        {
+            isDragging = false;
         }
 
         public void addPage_Selected(object sender, EventArgs e)
@@ -84,11 +119,13 @@ namespace GOA
                 new_tp.Text = "+";
                 new_tp.Paint += Page_DrawLines;
                 new_tp.AutoScroll = true;
-                new_tp.BackColor = SystemColors.Control;
+                new_tp.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
+                new_tp.BackColor = Color.FromArgb(206, 203, 247);
                 tabControl.TabPages.Add(new_tp);
                 tabControl.SelectedTab.Controls.Add(nb);
                 nb.drawLines();
                 tabControl.SelectedTab.ScrollControlIntoView(nb);
+                
             }
             else
             {
@@ -169,6 +206,7 @@ namespace GOA
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
             tabControl.SelectedTab.AutoScrollPosition = new Point(1500 - tabControl.SelectedTab.HorizontalScroll.Value - tabControl.Width / 2 + block1_1.Width / 2, 0);
+            Refresh();
         }
 
         private Bitmap CreateImg(TabPage currentPage)
@@ -191,6 +229,7 @@ namespace GOA
                 if (b.lvl > last.lvl)
                     last = b;
             }
+            currentPage.SetAutoScrollMargin(0,0);
             currentPage.AutoScroll = false;
             currentPage.AutoScrollPosition = new Point(left.Location.X, 0);
 
@@ -274,9 +313,13 @@ namespace GOA
                 b.Extend.Visible = true;
                 b.AddChild.Visible = true;
             }
+
             currentPage.AutoScrollPosition = new Point(0, 0);
+            currentPage.SetAutoScrollMargin(200, 0);
             return largeBmp;
         }
+
+
         private void ImgStr_Click(object sender, EventArgs e)
         {
             Bitmap largeBmp = CreateImg(tabControl.SelectedTab);
@@ -301,27 +344,38 @@ namespace GOA
             Microsoft.Office.Interop.Word.Document wordDoc;
             wordApp = new Microsoft.Office.Interop.Word.Application();
             wordDoc = wordApp.Documents.Add();
-            object start = 0;
-            object end = 0;
-            Microsoft.Office.Interop.Word.Range rng = wordDoc.Range(ref start, ref end);
-            rng.Text += "Варианты оргструктур для " + this.org_name.Text;
+            //object start = 0;
+            //object end = 0;
+           // Microsoft.Office.Interop.Word.Range rng = wordDoc.Range(ref start, ref end);
+            wordDoc.Characters.Last.Select();
+            wordApp.Selection.InsertAfter("Варианты организационных структур для " + this.org_name.Text);
+            wordDoc.Characters.Last.Select();
+            wordApp.Selection.InsertAfter("\r");
+            //rng.Text += "Варианты оргструктур для " + this.org_name.Text;
 
             foreach (TabPage tp in tabControl.TabPages)
             {
                 if (tp.Text != "+")
                 {
-                    tp.Select();
-                    start = wordDoc.Content.End - 1; end = wordDoc.Content.End;
-                    rng = wordDoc.Range(ref start, ref end);
+                    tabControl.SelectedTab = tp;
+                    //start = wordDoc.Content.End - 1; end = wordDoc.Content.End;
+                    //rng = wordDoc.Range(ref start, ref end);
+                    //Refresh();
                     Clipboard.SetImage(CreateImg(tp));
-                    rng.Paste();
+                    wordDoc.Characters.Last.Select();
+                    //wordApp.Selection.Collapse(Microsoft.Office.Interop.Word.WdCollapseDirection.wdCollapseEnd);
+                    wordApp.Selection.InsertParagraphAfter();
+                    wordApp.Selection.Paste();
 
-                    start = wordDoc.Content.End - 1; end = wordDoc.Content.End;
-                    rng = wordDoc.Range(ref start, ref end);
-                    wordDoc.Tables.Add(rng, 2, 4);
+                    //start = wordDoc.Content.End - 1; end = wordDoc.Content.End;
+                    //rng = wordDoc.Range(ref start, ref end);
+                    wordDoc.Characters.Last.Select();
+                    wordApp.Selection.InsertAfter("\r");
+                    wordDoc.Tables.Add(wordDoc.Characters.Last, 2, 4);
                     Microsoft.Office.Interop.Word.Table tbl = wordDoc.Tables[wordDoc.Tables.Count];
                     tbl.AllowAutoFit = true;
                     CreateResult();
+                    result.Show();
                     tbl.Cell(1, 1).Range.Text = result.dataGridView.Rows[0].Cells[0].Value.ToString();
                     tbl.Cell(1, 2).Range.Text = result.dataGridView.Rows[1].Cells[0].Value.ToString();
                     tbl.Cell(1, 3).Range.Text = result.dataGridView.Rows[2].Cells[0].Value.ToString();
@@ -330,36 +384,21 @@ namespace GOA
                     tbl.Cell(2, 2).Range.Text = result.dataGridView.Rows[1].Cells[tp.Text].Value.ToString();
                     tbl.Cell(2, 3).Range.Text = result.dataGridView.Rows[2].Cells[tp.Text].Value.ToString();
                     tbl.Cell(2, 4).Range.Text = result.dataGridView.Rows[3].Cells[tp.Text].Value.ToString();
+                    tbl.Borders.InsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+                    tbl.Borders.InsideLineWidth = Microsoft.Office.Interop.Word.WdLineWidth.wdLineWidth075pt;
+                    tbl.Borders.OutsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+                    tbl.Borders.OutsideLineWidth = Microsoft.Office.Interop.Word.WdLineWidth.wdLineWidth075pt;
+                    wordDoc.Characters.Last.Select();
+                    wordApp.Selection.InsertParagraphAfter();
                 }
             }
 
-    //Microsoft.Office.Interop.Word.Range tableLocation = wordDoc.Range(ref start, ref end);
-    //wordDoc.Tables.Add(tableLocation, 1, 4);
-    //wordApp.Visible = true;
+            wordDoc.Content.Select();
+            wordApp.Selection.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            wordApp.Selection.Font.Size = 14;
+            wordApp.Selection.Font.Name = "Times new Roman";
 
-    //wordDoc.Tables[1].Borders.InsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
-    //wordDoc.Tables[1].Borders.InsideLineWidth = Microsoft.Office.Interop.Word.WdLineWidth.wdLineWidth075pt;
-    //wordDoc.Tables[1].Borders.OutsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
-    //wordDoc.Tables[1].Borders.OutsideLineWidth = Microsoft.Office.Interop.Word.WdLineWidth.wdLineWidth075pt;
-    //Microsoft.Office.Interop.Word.Table tbl = wordDoc.Tables[1];
-    //tbl.AllowAutoFit = true;
-    //tbl.Cell(1, 1).Range.Text = result.dataGridView.Columns[0].HeaderText;
-    //tbl.Cell(1, 2).Range.Text = result.dataGridView.Columns[1].HeaderText;
-    //tbl.Cell(1, 3).Range.Text = result.dataGridView.Columns[2].HeaderText;
-    //tbl.Cell(1, 4).Range.Text = result.dataGridView.Columns[3].HeaderText;
-    //tbl.Cell(1, 5).Range.Text = result.dataGridView.Columns[4].HeaderText;
-
-    //for (int i = 0; i < result.dataGridView.Rows.Count - 1; i++)
-    //{
-    //    for (int j = 0; j < result.dataGridView.Columns.Count; j++)
-    //    {
-    //        tbl.Cell(i + 2, j + 1).Range.Text = result.dataGridView[j, i].Value.ToString();
-    //    }
-
-    //}
-
-    //wordDoc.Activate();
-    wordApp.Visible = true;
+            wordApp.Visible = true;
         }
 
         int getNumber(string s)
@@ -369,6 +408,36 @@ namespace GOA
             Regex regex = new Regex(@"\D");
             s = regex.Replace(s, "");
             return Convert.ToInt16(s);
+        }
+
+        private void CrossButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void RollButton_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void SizeButton_Click(object sender, EventArgs e)
+        {
+            if (Size.Width < 1500)
+            {
+                pos_x = Location.X;
+                pos_y = Location.Y;
+                Width = SystemInformation.VirtualScreen.Width;
+                Height = SystemInformation.VirtualScreen.Height;
+                Location = new Point(0, 0);
+                SizeButton.Image = Properties.Resources.size_min;
+            }          
+            else
+            {
+                
+                Size = new Size(1154, 760);
+                Location = new Point(pos_x, pos_y);
+                SizeButton.Image = Properties.Resources.size_max;
+            }           
         }
 
         public void CreateResult()
@@ -412,7 +481,6 @@ namespace GOA
         {
             CreateResult();
             result.Show();
-
         }
 
         private void OpenStruc_Click(object sender, EventArgs e)
@@ -490,7 +558,8 @@ namespace GOA
                         new_tp.Text = "Оргструктура" + currentTab;
                         new_tp.Paint += Page_DrawLines;
                         new_tp.AutoScroll = true;
-                        new_tp.BackColor = SystemColors.Control;
+                        new_tp.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
+                        new_tp.BackColor = Color.FromArgb(206, 203, 247);
                         tabControl.TabPages.Add(new_tp);
                         tabControl.SelectedTab = new_tp;
 
@@ -592,7 +661,8 @@ namespace GOA
                     add_tp.Text = "+";
                     add_tp.Paint += Page_DrawLines;
                     add_tp.AutoScroll = true;
-                    add_tp.BackColor = SystemColors.Control;
+                    add_tp.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
+                    add_tp.BackColor = Color.FromArgb(206, 203, 247);
                     tabControl.TabPages.Add(add_tp);
                     tabControl.Selected += addPage_Selected;
                 }
@@ -600,7 +670,7 @@ namespace GOA
                 oleDbConnection1.Close();
             }
             //MessageBox.Show(tabControl.SelectedTab.Text + " " + tabControl.SelectedTab.Controls[0].Name + " " + PointToScreen(first_here.Location));
-            tabControl.SelectedTab.AutoScrollPosition = new Point(first_here.Location.X - tabControl.SelectedTab.HorizontalScroll.Value - tabControl.Width / 2 + first_here.Width / 2, 0);
+            tabControl.SelectedTab.ScrollControlIntoView(first_here);
         }
 
         private void TabControl_Selected(object sender, TabControlEventArgs e)
@@ -610,106 +680,110 @@ namespace GOA
 
         private void SaveStruc_Click(object sender, EventArgs e)
         {
-
-            //OleDbConnection connection = new OleDbConnection();
-            command = new OleDbCommand();
-            OleDbDataReader reader;
-            oleDbConnection1.Open();
-            command.Connection = oleDbConnection1;
-            string query = "Select @@Identity";
-
-            command.CommandText = "SELECT (Код) FROM Организации WHERE (Наименование='" + org_name.Text + "')";
-
-            if (command.ExecuteScalar() != null)
-            {
-                reader = command.ExecuteReader();
-                reader.Read();
-                id_org = (int)reader["Код"];
-                reader.Close();
-                //MessageBox.Show("найдена старая организация - " + id_org);
-            }
-
+            if (org_name.Text == "Введите наименование организации" || org_name.Text == "")
+                MessageBox.Show("Введите наименование организации!");
             else
             {
-                command.CommandText = "insert into Организации (наименование) values ('" + org_name.Text + "')";
-                command.ExecuteNonQuery();
-                command.CommandText = query;
-                id_org = (int)command.ExecuteScalar();
+                //OleDbConnection connection = new OleDbConnection();
+                command = new OleDbCommand();
+                OleDbDataReader reader;
+                oleDbConnection1.Open();
+                command.Connection = oleDbConnection1;
+                string query = "Select @@Identity";
 
-                // MessageBox.Show("добавлена новая организация - " + id_org);
-            }
+                command.CommandText = "SELECT (Код) FROM Организации WHERE (Наименование='" + org_name.Text + "')";
 
+                if (command.ExecuteScalar() != null)
+                {
+                    reader = command.ExecuteReader();
+                    reader.Read();
+                    id_org = (int)reader["Код"];
+                    reader.Close();
+                    //MessageBox.Show("найдена старая организация - " + id_org);
+                }
 
-            foreach (TabPage tp in tabControl.TabPages)
-            {
-                if (tp.Text == "+")
-                    break;
                 else
                 {
-
-                    command.CommandText = "insert into Структуры (Организация) values (" + id_org + ")";
+                    command.CommandText = "insert into Организации (наименование) values ('" + org_name.Text + "')";
                     command.ExecuteNonQuery();
                     command.CommandText = query;
-                    id_str = (int)command.ExecuteScalar();
-                    //MessageBox.Show("Добавлена структура " + id_str + " для организации- " + id_org);
-                    currentTab = getNumber(tp.Text);
-                    Block first_here = (Block)tp.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault();
-                    foreach (Block b in first_here.Branch)
+                    id_org = (int)command.ExecuteScalar();
+
+                    // MessageBox.Show("добавлена новая организация - " + id_org);
+                }
+
+
+                foreach (TabPage tp in tabControl.TabPages)
+                {
+                    if (tp.Text == "+")
+                        break;
+                    else
                     {
-                        // MessageBox.Show("Сохраняем блок " + b.Name);
-                        if (b.myParent != null)
-                        {
 
-                            command.CommandText = "SELECT (Код) FROM Блоки WHERE (Имя='" + b.myParent.BlockData.Text + "') AND (Структура=" + id_str + ")";
-                            command.ExecuteNonQuery();
-                            reader = command.ExecuteReader();
-                            reader.Read();
-                            id_par = reader.GetInt32(0);
-                            reader.Close();
-
-                            command.CommandText = "insert into Блоки (Структура, Уровень, [Номер на уровне], Имя, Родитель, Тип) values (" + id_str + "," + b.lvl + "," + b.number + ",'" + b.BlockData.Text + "'," + id_par + ",'" + b.TypeOfBlock + "')";
-                            command.ExecuteNonQuery();
-                            command.CommandText = query;
-                            id_block = (int)command.ExecuteScalar();
-                            //MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", родитель " + id_par);
-                        }
-                        else
+                        command.CommandText = "insert into Структуры (Организация) values (" + id_org + ")";
+                        command.ExecuteNonQuery();
+                        command.CommandText = query;
+                        id_str = (int)command.ExecuteScalar();
+                        //MessageBox.Show("Добавлена структура " + id_str + " для организации- " + id_org);
+                        currentTab = getNumber(tp.Text);
+                        Block first_here = (Block)tp.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault();
+                        foreach (Block b in first_here.Branch)
                         {
-                            command.CommandText = "insert into Блоки (Структура, Уровень, [Номер на уровне], Имя, Тип) values (" + id_str + "," + b.lvl + "," + b.number + ",'" + b.BlockData.Text + "','" + b.TypeOfBlock + "')";
-                            command.ExecuteNonQuery();
-                            command.CommandText = query;
-                            id_block = (int)command.ExecuteScalar();
-                            // MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", без родителя ");
-                        }
-
-                        if (b.TypeOfBlock == "department")
-                        {
-                            foreach (TreeNode tn in b.MyTreeView.treeView.Nodes)
+                            // MessageBox.Show("Сохраняем блок " + b.Name);
+                            if (b.myParent != null)
                             {
-                                command.CommandText = "insert into Функции ( Наименование, Блок) values ('" + tn.Text + "'," + id_block + ")";
+
+                                command.CommandText = "SELECT (Код) FROM Блоки WHERE (Имя='" + b.myParent.BlockData.Text + "') AND (Структура=" + id_str + ")";
+                                command.ExecuteNonQuery();
+                                reader = command.ExecuteReader();
+                                reader.Read();
+                                id_par = reader.GetInt32(0);
+                                reader.Close();
+
+                                command.CommandText = "insert into Блоки (Структура, Уровень, [Номер на уровне], Имя, Родитель, Тип) values (" + id_str + "," + b.lvl + "," + b.number + ",'" + b.BlockData.Text + "'," + id_par + ",'" + b.TypeOfBlock + "')";
                                 command.ExecuteNonQuery();
                                 command.CommandText = query;
-                                id_node_par = (int)command.ExecuteScalar();
-                                //MessageBox.Show("Добавлена функция " + id_node_par + " для блока " + id_block );
-                                SaveNodes(tn, id_node_par);
+                                id_block = (int)command.ExecuteScalar();
+                                //MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", родитель " + id_par);
                             }
+                            else
+                            {
+                                command.CommandText = "insert into Блоки (Структура, Уровень, [Номер на уровне], Имя, Тип) values (" + id_str + "," + b.lvl + "," + b.number + ",'" + b.BlockData.Text + "','" + b.TypeOfBlock + "')";
+                                command.ExecuteNonQuery();
+                                command.CommandText = query;
+                                id_block = (int)command.ExecuteScalar();
+                                // MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", без родителя ");
+                            }
+
+                            if (b.TypeOfBlock == "department")
+                            {
+                                foreach (TreeNode tn in b.MyTreeView.treeView.Nodes)
+                                {
+                                    command.CommandText = "insert into Функции ( Наименование, Блок) values ('" + tn.Text + "'," + id_block + ")";
+                                    command.ExecuteNonQuery();
+                                    command.CommandText = query;
+                                    id_node_par = (int)command.ExecuteScalar();
+                                    //MessageBox.Show("Добавлена функция " + id_node_par + " для блока " + id_block );
+                                    SaveNodes(tn, id_node_par);
+                                }
+                            }
+
+
                         }
 
-
+                        try
+                        {
+                            command.CommandText = "insert into Характеристики (Структура, [Информационная оценка], [Число состояний системы], [Коэффициент централизации], [Коэффициент децентрализации]) values (" +
+                                id_str + ",'" + Convert.ToSingle(result.dataGridView.Rows[0].Cells[tp.Text].Value) + "','" + Convert.ToSingle(result.dataGridView.Rows[1].Cells[tp.Text].Value) + "','" +
+                                Convert.ToSingle(result.dataGridView.Rows[2].Cells[tp.Text].Value) + "','" + Convert.ToSingle(result.dataGridView.Rows[3].Cells[tp.Text].Value) + "')";
+                            command.ExecuteNonQuery(); ;
+                        }
+                        catch { }
+                        //MessageBox.Show("Добавлена характеристика для структуры " + id_str);
                     }
-
-                    try
-                    {
-                        command.CommandText = "insert into Характеристики (Структура, [Информационная оценка], [Число состояний системы], [Коэффициент централизации], [Коэффициент децентрализации]) values (" +
-                            id_str + ",'" + Convert.ToSingle(result.dataGridView.Rows[0].Cells[tp.Text].Value) + "','" + Convert.ToSingle(result.dataGridView.Rows[1].Cells[tp.Text].Value) + "','" +
-                            Convert.ToSingle(result.dataGridView.Rows[2].Cells[tp.Text].Value) + "','" + Convert.ToSingle(result.dataGridView.Rows[3].Cells[tp.Text].Value) + "')";
-                        command.ExecuteNonQuery(); ;
-                    }
-                    catch { }
-                    //MessageBox.Show("Добавлена характеристика для структуры " + id_str);
                 }
+                oleDbConnection1.Close();
             }
-            oleDbConnection1.Close();
         }
 
         public void SaveNodes(TreeNode tn, int id)

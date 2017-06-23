@@ -74,6 +74,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Results.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +93,7 @@
     </Compile>
     <EmbeddedResource Include="Block.resx">
       <DependentUpon>Block.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -97,14 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Results.resx">
       <DependentUpon>Results.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,34 +137,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="department.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="department-ico.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="position-ico.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="cross.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Save.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Analyze.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Open-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Save-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Camera-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Report-mini.png" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -193,6 +170,42 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\back.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Analyze.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Camera-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Report-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\roll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\size-max.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\size-min.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\department-ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\position-ico.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
