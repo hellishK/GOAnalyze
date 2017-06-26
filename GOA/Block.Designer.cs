@@ -65,12 +65,12 @@
             // BlockData
             // 
             this.BlockData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.BlockData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.BlockData.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.BlockData.Location = new System.Drawing.Point(27, 5);
             this.BlockData.MaxLength = 66;
             this.BlockData.Multiline = true;
             this.BlockData.Name = "BlockData";
-            this.BlockData.Size = new System.Drawing.Size(157, 46);
+            this.BlockData.Size = new System.Drawing.Size(157, 49);
             this.BlockData.TabIndex = 5;
             this.BlockData.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -97,7 +97,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(206, 203, 247);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(231)))), ((int)(((byte)(247)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Controls.Add(this.typePicture);
             this.Controls.Add(this.BlockData);

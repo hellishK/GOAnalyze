@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
-using System.Drawing.Imaging;
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows.Forms;
 
 namespace GOA
 {
@@ -51,14 +43,12 @@ namespace GOA
             tabPage1.AutoScrollMinSize = new System.Drawing.Size(3000, 3000);
             block1_1.Location = new Point(1500, 20);
             tabPage1.AutoScrollPosition = new Point(1500 - tabControl.Width / 2 + block1_1.Width / 2, 0);
-            tabPage1.SetAutoScrollMargin((tabControl.Width-block1_1.Width)/2, 0);
-            //block1_1.Location = new Point(1000, 15);
-            //tabPage1.Size = new Size(2000, 1500);
+            tabPage1.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
             tabControl.Selected += addPage_Selected;
             tabControl.TabPages[0].Paint += Page_DrawLines;
             tabControl.TabPages[1].Paint += Page_DrawLines;
-            tabControl.TabPages[0].BackColor = Color.FromArgb(206, 203, 247);
-            tabControl.TabPages[1].BackColor = Color.FromArgb(206, 203, 247);
+            tabControl.TabPages[0].BackColor = Color.FromArgb(207, 231, 247);
+            tabControl.TabPages[1].BackColor = Color.FromArgb(207, 231, 247);
             tabControl.TabPages[0].AutoScrollPosition = new Point(1500 - tabControl.Width / 2 + block1_1.Width / 2, 0);
             tabControl.TabPages[1].AutoScrollPosition = new Point(1500 - tabControl.Width / 2 + block1_1.Width / 2, 0);
             result.MaximizeBox = false;
@@ -68,11 +58,16 @@ namespace GOA
             result.dataGridView.Rows[1].Cells[0].Value = "Число состояний системы";
             result.dataGridView.Rows[2].Cells[0].Value = "Коэффициент централизации";
             result.dataGridView.Rows[3].Cells[0].Value = "Коэффициент децентрализации";
-            this.BackColor = Color.FromArgb(25, 107, 164);
-            org_name.BackColor = Color.FromArgb(25, 107, 164);
+            this.BackColor = Color.FromArgb(30, 111, 166);
+            org_name.BackColor = Color.FromArgb(30, 111, 166);
             this.MouseDown += Form_MouseDown;
             this.MouseMove += Form_MouseMove;
             this.MouseUp += Form_MouseUp;
+            OpenStruc.FlatAppearance.BorderColor = Color.FromArgb(206, 230, 247);
+            SaveStruc.FlatAppearance.BorderColor = Color.FromArgb(103, 150, 189);
+            ImgStr.FlatAppearance.BorderColor = Color.FromArgb(206, 230, 247);
+            AnalyzeStr.FlatAppearance.BorderColor = Color.FromArgb(206, 230, 247);
+            CreateReport.FlatAppearance.BorderColor = Color.FromArgb(138, 179, 211);
         }
 
         private void Form_MouseDown(object sender, MouseEventArgs e)
@@ -120,17 +115,16 @@ namespace GOA
                 new_tp.Paint += Page_DrawLines;
                 new_tp.AutoScroll = true;
                 new_tp.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
-                new_tp.BackColor = Color.FromArgb(206, 203, 247);
+                new_tp.BackColor = Color.FromArgb(207, 231, 247);
                 tabControl.TabPages.Add(new_tp);
                 tabControl.SelectedTab.Controls.Add(nb);
                 nb.drawLines();
                 tabControl.SelectedTab.ScrollControlIntoView(nb);
-                
+
             }
             else
             {
                 currentTab = getNumber(tabControl.SelectedTab.Text);
-                //MessageBox.Show(currentTab.ToString());
                 Block nb = ((Block)((TabControl)sender).SelectedTab.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault());
                 tabControl.SelectedTab.ScrollControlIntoView(nb);
                 nb.drawLines();
@@ -229,7 +223,7 @@ namespace GOA
                 if (b.lvl > last.lvl)
                     last = b;
             }
-            currentPage.SetAutoScrollMargin(0,0);
+            currentPage.SetAutoScrollMargin(0, 0);
             currentPage.AutoScroll = false;
             currentPage.AutoScrollPosition = new Point(left.Location.X, 0);
 
@@ -256,7 +250,6 @@ namespace GOA
                 largeBmp = new Bitmap(right.Location.X - left.Location.X + left.Width, last.Location.Y + last.Height, from_tab);
                 Graphics g = Graphics.FromImage(largeBmp);
 
-                //MessageBox.Show("Ширина " + (right.Location.X - left.Location.X + left.Width) + ", Высота " + (last.Location.Y + last.Height) + ", Экранов по вертик " + max_v + ", Экранов по горизонт " + max);
                 while (count_v <= max_v)
                 {
                     x = 0;
@@ -264,7 +257,6 @@ namespace GOA
 
                     while (count <= max)
                     {
-                       // MessageBox.Show("!");
                         g = Graphics.FromImage(largeBmp);
 
                         Bitmap smallBmp = new Bitmap(tabControl.Width, tabControl.Height, from_tab);
@@ -273,7 +265,6 @@ namespace GOA
                         if (count == max && max > 1)
                         {
                             int small_x = right.Location.X - left.Location.X + left.Width - x;
-                            // MessageBox.Show(small_x.ToString());
                             if (count_v == max_v && max_v > 1)
                             {
                                 int small_y = last.Location.Y + last.Height - y;
@@ -296,7 +287,7 @@ namespace GOA
                         currentPage.AutoScrollPosition = new Point(-currentPage.AutoScrollPosition.X + tabControl.Width, -currentPage.AutoScrollPosition.Y);
 
                         count++;
-                        x += tabControl.Width;
+                        x += tabControl.Width-10;
 
                     }
 
@@ -306,7 +297,7 @@ namespace GOA
                 }
 
             }
-            currentPage.AutoScroll = true; 
+            currentPage.AutoScroll = true;
 
             foreach (Block b in currentPage.Controls)
             {
@@ -332,10 +323,10 @@ namespace GOA
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                    FileStream fstream = new FileStream(saveFileDialog.FileName, FileMode.Create);
-                    largeBmp.Save(fstream, System.Drawing.Imaging.ImageFormat.Bmp);
-                     fstream.Close();
-            }   
+                FileStream fstream = new FileStream(saveFileDialog.FileName, FileMode.Create);
+                largeBmp.Save(fstream, System.Drawing.Imaging.ImageFormat.Bmp);
+                fstream.Close();
+            }
         }
 
         private void CreateReport_Click(object sender, EventArgs e)
@@ -344,31 +335,20 @@ namespace GOA
             Microsoft.Office.Interop.Word.Document wordDoc;
             wordApp = new Microsoft.Office.Interop.Word.Application();
             wordDoc = wordApp.Documents.Add();
-            //object start = 0;
-            //object end = 0;
-           // Microsoft.Office.Interop.Word.Range rng = wordDoc.Range(ref start, ref end);
             wordDoc.Characters.Last.Select();
             wordApp.Selection.InsertAfter("Варианты организационных структур для " + this.org_name.Text);
             wordDoc.Characters.Last.Select();
             wordApp.Selection.InsertAfter("\r");
-            //rng.Text += "Варианты оргструктур для " + this.org_name.Text;
 
             foreach (TabPage tp in tabControl.TabPages)
             {
                 if (tp.Text != "+")
                 {
                     tabControl.SelectedTab = tp;
-                    //start = wordDoc.Content.End - 1; end = wordDoc.Content.End;
-                    //rng = wordDoc.Range(ref start, ref end);
-                    //Refresh();
                     Clipboard.SetImage(CreateImg(tp));
                     wordDoc.Characters.Last.Select();
-                    //wordApp.Selection.Collapse(Microsoft.Office.Interop.Word.WdCollapseDirection.wdCollapseEnd);
                     wordApp.Selection.InsertParagraphAfter();
                     wordApp.Selection.Paste();
-
-                    //start = wordDoc.Content.End - 1; end = wordDoc.Content.End;
-                    //rng = wordDoc.Range(ref start, ref end);
                     wordDoc.Characters.Last.Select();
                     wordApp.Selection.InsertAfter("\r");
                     wordDoc.Tables.Add(wordDoc.Characters.Last, 2, 4);
@@ -403,8 +383,6 @@ namespace GOA
 
         int getNumber(string s)
         {
-           // MessageBox.Show(s);
-
             Regex regex = new Regex(@"\D");
             s = regex.Replace(s, "");
             return Convert.ToInt16(s);
@@ -430,14 +408,14 @@ namespace GOA
                 Height = SystemInformation.VirtualScreen.Height;
                 Location = new Point(0, 0);
                 SizeButton.Image = Properties.Resources.size_min;
-            }          
+            }
             else
             {
-                
+
                 Size = new Size(1154, 760);
                 Location = new Point(pos_x, pos_y);
                 SizeButton.Image = Properties.Resources.size_max;
-            }           
+            }
         }
 
         public void CreateResult()
@@ -472,14 +450,16 @@ namespace GOA
             result.dataGridView.Rows[0].Cells[cur_i].Value = Math.Round(Math.Log10(first_here.Branch.Count), 3).ToString();
             result.dataGridView.Rows[1].Cells[cur_i].Value = Math.Round(Math.Log(first_here.Branch.Count, 2), 3).ToString();
             result.dataGridView.Rows[2].Cells[cur_i].Value = Math.Round(((double)lvls[2] / first_here.Branch.Count), 3).ToString();
-            //result.Width = Convert.ToInt32(result.inf_oc.Location.X) + result.inf_oc.Width + 100;
             result.dataGridView.Rows[3].Cells[cur_i].Value = Math.Round(((double)lvls.Length / first_here.Branch.Count), 3).ToString();
-
         }
 
         private void AnalyzeStr_Click(object sender, EventArgs e)
         {
-            CreateResult();
+            foreach (TabPage tp in tabControl.TabPages)
+            {
+                tabControl.SelectedTab = tp;
+                CreateResult();
+            }
             result.Show();
         }
 
@@ -520,7 +500,6 @@ namespace GOA
                 orgDialog.Hide();
                 tabControl.Selected -= addPage_Selected;
                 this.org_name.Text = orgDialog.OrgList.SelectedItem.ToString();
-                MessageBox.Show(orgDialog.OrgList.SelectedItem.ToString());
                 foreach (TabPage tp in tabControl.TabPages)
                 {
                     tabControl.TabPages.Remove(tp);
@@ -547,19 +526,16 @@ namespace GOA
                         id_str = (int)reader_str["Код"];
 
                         if (tabControl.TabPages.Count > 0)
-                        {
-                            //MessageBox.Show("Вычисляем в структуре " + tabControl.TabPages[tabControl.TabPages.Count - 1].Text + 1);
                             currentTab = getNumber(tabControl.TabPages[tabControl.TabPages.Count - 1].Text) + 1;
 
-                        }
                         else currentTab = 1;
-                        // MessageBox.Show("Имя структуры " + currentTab.ToString());
+
                         TabPage new_tp = new TabPage("tabPage" + currentTab);
                         new_tp.Text = "Оргструктура" + currentTab;
                         new_tp.Paint += Page_DrawLines;
                         new_tp.AutoScroll = true;
                         new_tp.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
-                        new_tp.BackColor = Color.FromArgb(206, 203, 247);
+                        new_tp.BackColor = Color.FromArgb(207, 231, 247);
                         tabControl.TabPages.Add(new_tp);
                         tabControl.SelectedTab = new_tp;
 
@@ -575,9 +551,7 @@ namespace GOA
                         {
                             reader_block.Read();
                             id_block = (int)reader_block["Код"];
-                            // MessageBox.Show("Вычисляем имя блока " + tabControl.TabPages[tabControl.TabPages.Count - 1].Text + 1);
                             currentTab = getNumber(tabControl.TabPages[tabControl.TabPages.Count - 1].Text);
-                            // MessageBox.Show(currentTab.ToString());
                             first_here = new Block();
                             first_here.lvl = (int)reader_block["Уровень"];
                             first_here.number = (int)reader_block["Номер на уровне"];
@@ -594,7 +568,7 @@ namespace GOA
                             new_tp.Controls.Add(first_here);
                             reader_block.Close();
 
-                            command_block.CommandText = "SELECT * FROM (Блоки AS b1 LEFT JOIN Блоки AS b2 ON b1.Родитель=b2.Код) LEFT JOIN Блоки AS b3 ON b2.Родитель=b3.Код WHERE (b1.Структура=" + id_str + ") AND (b1.Родитель IS NOT NULL) ORDER BY b1.Родитель";
+                            command_block.CommandText = "SELECT * FROM (Блоки AS b1 LEFT JOIN Блоки AS b2 ON b1.Родитель=b2.Код) LEFT JOIN Блоки AS b3 ON b2.Родитель=b3.Код WHERE (b1.Структура=" + id_str + ") AND (b1.Родитель IS NOT NULL) ORDER BY b1.Родитель, b1.[Номер на уровне]";
                             reader_block = command_block.ExecuteReader();
 
                             if (reader_block.HasRows)
@@ -641,20 +615,22 @@ namespace GOA
                                     }
 
                                     Block par;
-                                    // MessageBox.Show("Вычисляем имя блока для добавления " + tabControl.SelectedTab.Text);
                                     currentTab = getNumber(tabControl.SelectedTab.Text);
-                                    //MessageBox.Show(currentTab.ToString());
 
                                     if (reader_block["b2.Родитель"] == DBNull.Value)
                                         par = first_here;
                                     else
                                         par = (Block)tabControl.SelectedTab.Controls.Find("block" + currentTab + "_" + ((int)reader_block["b2.Уровень"]).ToString() + "_" + ((int)reader_block["b3.Номер на уровне"]).ToString() + "(" + ((int)reader_block["b2.Номер на уровне"]).ToString() + ")", true).FirstOrDefault();
-                                    par.Add(par, 1, nb, (string)reader_block["b1.Тип"]);
+
+                                    try
+                                    { par.Add(par, 1, nb, (string)reader_block["b1.Тип"]); }
+                                    catch { MessageBox.Show("block" + currentTab + "_" + (reader_block["b2.Уровень"]).ToString() + "_" + (reader_block["b3.Номер на уровне"]).ToString() + "(" + (reader_block["b2.Номер на уровне"]).ToString() + ")"); }
                                 }
                                 reader_block.Close();
                             }
                         }
                     }
+
                     reader_str.Close();
                     TabPage add_tp = new TabPage("+");
                     add_tp.Name = "addPage";
@@ -662,14 +638,13 @@ namespace GOA
                     add_tp.Paint += Page_DrawLines;
                     add_tp.AutoScroll = true;
                     add_tp.SetAutoScrollMargin((tabControl.Width - block1_1.Width) / 2, 0);
-                    add_tp.BackColor = Color.FromArgb(206, 203, 247);
+                    add_tp.BackColor = Color.FromArgb(207, 231, 247);
                     tabControl.TabPages.Add(add_tp);
                     tabControl.Selected += addPage_Selected;
                 }
 
                 oleDbConnection1.Close();
             }
-            //MessageBox.Show(tabControl.SelectedTab.Text + " " + tabControl.SelectedTab.Controls[0].Name + " " + PointToScreen(first_here.Location));
             tabControl.SelectedTab.ScrollControlIntoView(first_here);
         }
 
@@ -684,7 +659,21 @@ namespace GOA
                 MessageBox.Show("Введите наименование организации!");
             else
             {
-                //OleDbConnection connection = new OleDbConnection();
+                //проверка заполненности блоков
+
+                //foreach (TabPage tp in tabControl.TabPages)
+                //{
+                //    currentTab = getNumber(tp.Text);
+                //    Block first_here = (Block)tp.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault();
+                //    foreach (Block b in first_here.Branch)
+                //    {
+                //        if (b.BlockData.Text == "")
+                //        {
+                //            MessageBox.Show("Не все блоки заполнены! Проверьте уровень " + b.lvl + " структуры" + tp.Text);
+                //            return;
+                //        }
+                //    }
+                //}
                 command = new OleDbCommand();
                 OleDbDataReader reader;
                 oleDbConnection1.Open();
@@ -699,19 +688,14 @@ namespace GOA
                     reader.Read();
                     id_org = (int)reader["Код"];
                     reader.Close();
-                    //MessageBox.Show("найдена старая организация - " + id_org);
+                    command.CommandText = "DELETE * FROM Организации WHERE (Код=" + id_org + ")";
+                    command.ExecuteNonQuery();
                 }
 
-                else
-                {
                     command.CommandText = "insert into Организации (наименование) values ('" + org_name.Text + "')";
                     command.ExecuteNonQuery();
                     command.CommandText = query;
                     id_org = (int)command.ExecuteScalar();
-
-                    // MessageBox.Show("добавлена новая организация - " + id_org);
-                }
-
 
                 foreach (TabPage tp in tabControl.TabPages)
                 {
@@ -724,15 +708,12 @@ namespace GOA
                         command.ExecuteNonQuery();
                         command.CommandText = query;
                         id_str = (int)command.ExecuteScalar();
-                        //MessageBox.Show("Добавлена структура " + id_str + " для организации- " + id_org);
                         currentTab = getNumber(tp.Text);
                         Block first_here = (Block)tp.Controls.Find("block" + currentTab + "_1", false).FirstOrDefault();
                         foreach (Block b in first_here.Branch)
                         {
-                            // MessageBox.Show("Сохраняем блок " + b.Name);
                             if (b.myParent != null)
                             {
-
                                 command.CommandText = "SELECT (Код) FROM Блоки WHERE (Имя='" + b.myParent.BlockData.Text + "') AND (Структура=" + id_str + ")";
                                 command.ExecuteNonQuery();
                                 reader = command.ExecuteReader();
@@ -744,7 +725,6 @@ namespace GOA
                                 command.ExecuteNonQuery();
                                 command.CommandText = query;
                                 id_block = (int)command.ExecuteScalar();
-                                //MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", родитель " + id_par);
                             }
                             else
                             {
@@ -752,7 +732,6 @@ namespace GOA
                                 command.ExecuteNonQuery();
                                 command.CommandText = query;
                                 id_block = (int)command.ExecuteScalar();
-                                // MessageBox.Show("Добавлен блок " + id_block + " для структуры " + id_str + ", без родителя ");
                             }
 
                             if (b.TypeOfBlock == "department")
@@ -763,7 +742,6 @@ namespace GOA
                                     command.ExecuteNonQuery();
                                     command.CommandText = query;
                                     id_node_par = (int)command.ExecuteScalar();
-                                    //MessageBox.Show("Добавлена функция " + id_node_par + " для блока " + id_block );
                                     SaveNodes(tn, id_node_par);
                                 }
                             }
@@ -779,10 +757,10 @@ namespace GOA
                             command.ExecuteNonQuery(); ;
                         }
                         catch { }
-                        //MessageBox.Show("Добавлена характеристика для структуры " + id_str);
                     }
                 }
                 oleDbConnection1.Close();
+                MessageBox.Show("Данные успешно сохранены");
             }
         }
 
@@ -796,7 +774,6 @@ namespace GOA
                 command.CommandText = "insert into Функции (Родитель, Наименование, Блок) values (" + func + ",'" + tnch.Text + "'," + id_block + ")";
                 command.ExecuteNonQuery();
                 command.CommandText = query;
-                //MessageBox.Show("Добавлена функция " + (int)command.ExecuteScalar() + " для блока " +id_block + ", родитель " + func);
                 SaveNodes(tnch, (int)command.ExecuteScalar());
             }
         }
@@ -877,6 +854,8 @@ namespace GOA
             else if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.GetType() == typeof(Panel))
                 currentBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl;
 
+
+            // дети удаляются из всех ветвей
             for (int i = currentBlock.Branch.Count - 1; i > -1; i--)
             {
                 Block par = currentBlock;
@@ -885,38 +864,57 @@ namespace GOA
                     par = par.myParent;
                     par.Branch.Remove(currentBlock.Branch[i]);
                 }
-
                 tabControl.TabPages[tabControl.SelectedIndex].Controls.Remove(currentBlock.Branch[i]);
             }
 
-            Block left_del = currentBlock;
-            while (left_del.MyChilds.Count > 0)
-                left_del = left_del.MyChilds[0];
 
             if (currentBlock.myParent.MyChilds.Count > currentBlock.number)
             {
-                Block left_next = currentBlock.myParent.MyChilds[currentBlock.number + 1];
+                //находим самого левого ребенка в удаляемой ветви, до его позиции будем сдвигать братьев удаляемого блока
+                Block left_del = currentBlock;
+                while (left_del.MyChilds.Count > 0)
+                    left_del = left_del.MyChilds[0];
+
+                Block left_next = currentBlock.myParent.MyChilds[currentBlock.number];
+
                 while (left_next.MyChilds.Count > 0)
                     left_next = left_next.MyChilds[0];
 
                 int newpos = left_next.Location.X - left_del.Location.X;
 
-
-                for (int i = currentBlock.number + 1; i < currentBlock.myParent.MyChilds.Count; i++)
+                for (int i = currentBlock.number; i < currentBlock.myParent.MyChilds.Count; i++)
                 {
                     foreach (Block b in currentBlock.myParent.MyChilds[i].Branch)
+                    {
                         b.Location = new Point(b.Location.X - newpos, b.Location.Y);
+                        b.number--;
+                    }
+
+                    currentBlock.myParent.MyChilds[i].Location = new Point(currentBlock.myParent.MyChilds[i].Location.X, currentBlock.myParent.MyChilds[i].Location.Y);
+                }
+
+                Block par = currentBlock;
+                while (par.myParent.myParent != null)
+                {
+                    par = par.myParent;
+                    for (int i = par.number; i < par.myParent.MyChilds.Count; i++)
+                    {
+                        foreach (Block b in par.myParent.MyChilds[i].Branch)
+                        {
+                            b.Location = new Point(b.Location.X - newpos, b.Location.Y);
+                        }
+
+                    }
                 }
             }
 
 
-
-            currentBlock.first.Location = new Point(currentBlock.first.MyChilds[0].Location.X + (currentBlock.first.MyChilds[currentBlock.first.MyChilds.Count - 1].Location.X - currentBlock.first.MyChilds[0].Location.X) / 2, currentBlock.first.Location.Y);
-
-            currentBlock.myParent.MyChilds.Remove(currentBlock);
             tabControl.TabPages[tabControl.SelectedIndex].Controls.Remove(currentBlock);
+            currentBlock.myParent.MyChilds.Remove(currentBlock);
+            currentBlock.myParent.Location = new Point(currentBlock.myParent.MyChilds[0].Location.X + (currentBlock.myParent.MyChilds[currentBlock.myParent.MyChilds.Count - 1].Location.X - currentBlock.myParent.MyChilds[0].Location.X) / 2, currentBlock.myParent.Location.Y);
+            currentBlock.first.Location = new Point(currentBlock.first.MyChilds[0].Location.X + (currentBlock.first.MyChilds[currentBlock.first.MyChilds.Count - 1].Location.X - currentBlock.first.MyChilds[0].Location.X) / 2, currentBlock.first.Location.Y);
             currentBlock.Dispose();
-            block1_1.drawLines();
+            currentBlock.first.drawLines();
         }
 
 
@@ -969,23 +967,27 @@ namespace GOA
             else if (((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl.Parent.GetType() == typeof(Panel))
                 currentBlock = (Block)((sender as MenuItem).GetContextMenu() as ContextMenu).SourceControl;
 
-            foreach (Block c in copyBlock.Branch)
+            try
             {
-                if (currentBlock.Name == c.Name)
+                foreach (Block c in copyBlock.Branch)
                 {
-                    MessageBox.Show("Ошибка: Нельзя копировать ветвь саму в себя!");
-                    return;
+                    if (currentBlock.Name == c.Name)
+                    {
+                        MessageBox.Show("Ошибка: Нельзя копировать ветвь саму в себя!");
+                        return;
+                    }
+
                 }
 
+                currentBlock.Add(currentBlock, 1, copyBlock, copyBlock.TypeOfBlock);
+
+                currentBlock = currentBlock.MyChilds[currentBlock.MyChilds.Count - 1];
+
+                pasteChilds(currentBlock, copyBlock);
+
+                isCopyBranch = false;
             }
-
-            currentBlock.Add(currentBlock, 1, copyBlock, copyBlock.TypeOfBlock);
-
-            currentBlock = currentBlock.MyChilds[currentBlock.MyChilds.Count - 1];
-
-            pasteChilds(currentBlock, copyBlock);
-
-            isCopyBranch = false;
+            catch { MessageBox.Show("Извините, прозошла ошибка при копировании!"); }
         }
 
 

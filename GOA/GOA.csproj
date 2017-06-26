@@ -13,6 +13,21 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,6 +50,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>GOA.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -117,7 +135,6 @@
     </None>
     <None Include="DataSet1.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
     <None Include="DataSet1.xss">
@@ -138,9 +155,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cross.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Save.ico" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
@@ -175,21 +189,6 @@
     <None Include="Resources\back.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Open-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Analyze.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Camera-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Report-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Save-mini.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\roll.png" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +205,47 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\position-ico.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\back-sun.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Analyze.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Camera-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Open-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Report-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Save-mini.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open_button.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

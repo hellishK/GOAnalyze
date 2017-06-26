@@ -14,7 +14,7 @@ namespace GOA
         public Organizations()
         {
             InitializeComponent();
-            BackColor = Color.FromArgb(25, 107, 164);
+            BackColor = Color.FromArgb(30, 111, 166);
             this.MouseDown += Form_MouseDown;
             this.MouseMove += Form_MouseMove;
             this.MouseUp += Form_MouseUp;

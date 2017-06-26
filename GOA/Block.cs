@@ -176,7 +176,6 @@ namespace GOA
             newBlock.BlockData.ContextMenu = Form.ActiveForm.Controls.Find("block1_1", true).FirstOrDefault().ContextMenu;
             newBlock.number = papa.MyChilds.Count+1;
             newBlock.Name = "block" + (tc.SelectedIndex + 1) + "_" + newBlock.lvl + "_" + papa.number + "(" + newBlock.number + ")";
-            newBlock.BlockData.Text = newBlock.Name;
 
             // первый блок распологается непосредственно под родительским
             if (papa.MyChilds.Count == 0)
@@ -264,26 +263,27 @@ namespace GOA
             }
 
             //вычисляем координаты для блока1 (середину)
-            newBlock.first.Location = new Point(newBlock.first.MyChilds[0].Location.X + (newBlock.first.MyChilds[newBlock.first.MyChilds.Count - 1].Location.X - newBlock.first.MyChilds[0].Location.X) / 2, newBlock.first.Location.Y);
+
+                newBlock.first.Location = new Point(newBlock.first.MyChilds[0].Location.X + (newBlock.first.MyChilds[newBlock.first.MyChilds.Count - 1].Location.X - newBlock.first.MyChilds[0].Location.X) / 2, newBlock.first.Location.Y);
+
             tc.SelectedTab.Controls.Add(newBlock);
 
+            //вызов метода отрисовки линий связи
             drawLines();
         }
 
 
-        //отрисовка соединительных линий
+        //отрисовка линий связи
         public void drawLines()
         {
 
             if (tc == null)
                 tc = ((TabControl)Form.ActiveForm.Controls.Find("tabControl", false).FirstOrDefault());
 
-            //tc.SelectedTab.Refresh();
-
             Pen pen = new Pen(Color.FromArgb(102,102,102), 3);
 
             if (formGraphics != null)
-                formGraphics.Clear(Color.FromArgb(206, 203, 247));
+                formGraphics.Clear(Color.FromArgb(207, 231, 247));
 
             formGraphics = tc.SelectedTab.CreateGraphics();
 

@@ -118,9 +118,9 @@
             // 
             // block1_1
             // 
-            this.block1_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(206)))), ((int)(((byte)(203)))), ((int)(((byte)(247)))));
+            this.block1_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(231)))), ((int)(((byte)(247)))));
             this.block1_1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.block1_1.Location = new System.Drawing.Point(506, 31);
+            this.block1_1.Location = new System.Drawing.Point(474, 20);
             this.block1_1.Name = "block1_1";
             this.block1_1.Size = new System.Drawing.Size(190, 74);
             this.block1_1.TabIndex = 0;
@@ -139,11 +139,13 @@
             this.AnalyzeStr.BackColor = System.Drawing.Color.Transparent;
             this.AnalyzeStr.Cursor = System.Windows.Forms.Cursors.Hand;
             this.AnalyzeStr.FlatAppearance.BorderSize = 0;
+            this.AnalyzeStr.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.AnalyzeStr.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.AnalyzeStr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.AnalyzeStr.Image = ((System.Drawing.Image)(resources.GetObject("AnalyzeStr.Image")));
-            this.AnalyzeStr.Location = new System.Drawing.Point(140, 50);
+            this.AnalyzeStr.Location = new System.Drawing.Point(134, 62);
             this.AnalyzeStr.Name = "AnalyzeStr";
-            this.AnalyzeStr.Size = new System.Drawing.Size(28, 28);
+            this.AnalyzeStr.Size = new System.Drawing.Size(26, 26);
             this.AnalyzeStr.TabIndex = 6;
             this.AnalyzeStr.UseVisualStyleBackColor = false;
             this.AnalyzeStr.Click += new System.EventHandler(this.AnalyzeStr_Click);
@@ -153,11 +155,13 @@
             this.SaveStruc.BackColor = System.Drawing.Color.Transparent;
             this.SaveStruc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.SaveStruc.FlatAppearance.BorderSize = 0;
+            this.SaveStruc.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.SaveStruc.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.SaveStruc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SaveStruc.Image = ((System.Drawing.Image)(resources.GetObject("SaveStruc.Image")));
-            this.SaveStruc.Location = new System.Drawing.Point(64, 103);
+            this.SaveStruc.Image = global::GOA.Properties.Resources.Save_mini;
+            this.SaveStruc.Location = new System.Drawing.Point(61, 106);
             this.SaveStruc.Name = "SaveStruc";
-            this.SaveStruc.Size = new System.Drawing.Size(28, 28);
+            this.SaveStruc.Size = new System.Drawing.Size(23, 26);
             this.SaveStruc.TabIndex = 7;
             this.SaveStruc.UseVisualStyleBackColor = false;
             this.SaveStruc.Click += new System.EventHandler(this.SaveStruc_Click);
@@ -471,12 +475,15 @@
             this.OpenStruc.BackColor = System.Drawing.Color.Transparent;
             this.OpenStruc.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.OpenStruc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OpenStruc.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.OpenStruc.FlatAppearance.BorderSize = 0;
+            this.OpenStruc.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.OpenStruc.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.OpenStruc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.OpenStruc.Image = ((System.Drawing.Image)(resources.GetObject("OpenStruc.Image")));
-            this.OpenStruc.Location = new System.Drawing.Point(12, 103);
+            this.OpenStruc.Image = global::GOA.Properties.Resources.Open_mini;
+            this.OpenStruc.Location = new System.Drawing.Point(10, 105);
             this.OpenStruc.Name = "OpenStruc";
-            this.OpenStruc.Size = new System.Drawing.Size(33, 28);
+            this.OpenStruc.Size = new System.Drawing.Size(25, 23);
             this.OpenStruc.TabIndex = 8;
             this.OpenStruc.UseVisualStyleBackColor = false;
             this.OpenStruc.Click += new System.EventHandler(this.OpenStruc_Click);
@@ -486,11 +493,13 @@
             this.ImgStr.BackColor = System.Drawing.Color.Transparent;
             this.ImgStr.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ImgStr.FlatAppearance.BorderSize = 0;
+            this.ImgStr.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.ImgStr.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.ImgStr.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ImgStr.Image = ((System.Drawing.Image)(resources.GetObject("ImgStr.Image")));
-            this.ImgStr.Location = new System.Drawing.Point(113, 82);
+            this.ImgStr.Image = global::GOA.Properties.Resources.Camera_mini;
+            this.ImgStr.Location = new System.Drawing.Point(103, 91);
             this.ImgStr.Name = "ImgStr";
-            this.ImgStr.Size = new System.Drawing.Size(28, 28);
+            this.ImgStr.Size = new System.Drawing.Size(27, 24);
             this.ImgStr.TabIndex = 9;
             this.ImgStr.UseVisualStyleBackColor = false;
             this.ImgStr.Click += new System.EventHandler(this.ImgStr_Click);
@@ -501,9 +510,11 @@
             this.CreateReport.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CreateReport.Cursor = System.Windows.Forms.Cursors.Hand;
             this.CreateReport.FlatAppearance.BorderSize = 0;
+            this.CreateReport.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.CreateReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.CreateReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CreateReport.Image = ((System.Drawing.Image)(resources.GetObject("CreateReport.Image")));
-            this.CreateReport.Location = new System.Drawing.Point(157, 8);
+            this.CreateReport.Location = new System.Drawing.Point(154, 17);
             this.CreateReport.Name = "CreateReport";
             this.CreateReport.Size = new System.Drawing.Size(28, 28);
             this.CreateReport.TabIndex = 10;
@@ -627,10 +638,10 @@
         private System.Windows.Forms.Button OpenStruc;
         private System.Windows.Forms.Button ImgStr;
         private System.Windows.Forms.Button CreateReport;
-        private Block block1_1;
         private System.Windows.Forms.Button CrossButton;
         private System.Windows.Forms.Button SizeButton;
         private System.Windows.Forms.Button RollButton;
+        private Block block1_1;
     }
 }
 

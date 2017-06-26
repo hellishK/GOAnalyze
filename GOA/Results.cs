@@ -14,8 +14,8 @@ namespace GOA
         public Results()
         {
             InitializeComponent();
-            BackColor = Color.FromArgb(25, 107, 164);
-            dataGridView.BackgroundColor = Color.FromArgb(25, 107, 164);
+            BackColor = Color.FromArgb(30, 111, 166);
+            dataGridView.BackgroundColor = Color.FromArgb(30, 111, 166);
             this.MouseDown += Form_MouseDown;
             this.MouseMove += Form_MouseMove;
             this.MouseUp += Form_MouseUp;

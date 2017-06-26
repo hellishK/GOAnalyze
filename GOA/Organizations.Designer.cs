@@ -46,16 +46,19 @@
             // OK
             // 
             this.OK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.OK.FlatAppearance.BorderSize = 0;
+            this.OK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.OK.Image = global::GOA.Properties.Resources.open_button;
             this.OK.Location = new System.Drawing.Point(382, 50);
             this.OK.Name = "OK";
             this.OK.Size = new System.Drawing.Size(75, 23);
             this.OK.TabIndex = 1;
-            this.OK.Text = "Открыть";
             this.OK.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(18, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(130, 13);

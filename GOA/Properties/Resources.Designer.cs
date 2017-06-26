@@ -83,6 +83,16 @@ namespace GOA.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap back_sun {
+            get {
+                object obj = ResourceManager.GetObject("back_sun", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Camera_mini {
             get {
                 object obj = ResourceManager.GetObject("Camera_mini", resourceCulture);
@@ -106,6 +116,16 @@ namespace GOA.Properties {
         internal static System.Drawing.Bitmap department_ico {
             get {
                 object obj = ResourceManager.GetObject("department_ico", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap open_button {
+            get {
+                object obj = ResourceManager.GetObject("open_button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
